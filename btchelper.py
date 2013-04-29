@@ -1,0 +1,172 @@
+#encoding=utf-8
+from bottle import request, get, post, debug, run, default_app
+import hashlib
+import os
+import time
+import xml.etree.ElementTree as ET
+import settings
+from fetcher import Mtgox
+
+
+TOKEN = '55ac87b3ffb018bd583248873385f775'
+
+
+class ResponsePost():
+    def __init__(self, msg_dic):
+        self.msg_dic = msg_dic
+
+    def nonce():
+        return str(int(time.time() * 1e6))
+
+    def help_info(self):
+        """支持的查询命令：
+           比特币实时价格汇总   -- 输入 'btc' 或 '比特币' 或 '价格'
+           利特币实时价格汇总   -- 输入 'ltc' 或 '利特币'
+           mtgox实时交易信息    -- 输入 'mtgox' 或 'mt' 或 'gox'
+           btc-e实时交易信息    -- 输入 'btce' 或 'btc-e'
+           btcchina实时交易信息 -- 输入 'btcc' 或 'btcchina'
+           42btc实时交易信息    -- 输入'42btc'
+        """
+        return settings.RESPONSE_TXT % (
+            self.msg_dic['FromUserName'],
+            self.msg_dic['ToUserName'],
+            int(time.time()),
+            'text',
+            u"""目前已支持查询命令：
+                    比特币实时价格汇总   -- 输入 'btc' 或 '比特币'
+
+                正在开发中的查询命令:
+                    利特币实时价格汇总   -- 输入 'ltc' 或 '利特币'
+                    mtgox实时交易信息    -- 输入 'mtgox' 或 'mt' 或 'gox'
+                    btc-e实时交易信息    -- 输入 'btce' 或 'btc-e'
+                    btcchina实时交易信息 -- 输入 'btcc' 或 'btcchina'
+                    42btc实时交易信息    -- 输入'42btc'
+                """,
+            '1')
+
+    def response_txt(self, content):
+        """response a text message"""
+        return settings.RESPONSE_TXT % (
+            self.msg_dic['FromUserName'],
+            self.msg_dic['ToUserName'],
+            int(time.time()),
+            'text',
+            content,
+            '0')
+
+    def btc(self):
+        pass
+
+    def ltc(self):
+        pass
+
+    def mtgox(self):
+        mt = Mtgox()
+        content = u"""最新成交价:%s
+        最高成交价:%s
+        最低成交价:%s
+        今日成交量：%s
+        加权平均价:%s""" % (mt.last_all, mt.high, mt.low, mt.volume, mt.vwap)
+        return self.response_txt(content)
+
+    def btce(self):
+        pass
+
+    def btcchina(self):
+        pass
+
+    def cn42btc(self):
+        pass
+
+    def others(self):
+        return settings.RESPONSE_TXT % (self.msg_dic['FromUserName'],
+                                        self.msg_dic['ToUserName'],
+                                        str(int(time.time())),
+                                        'text',
+                                        u'尚不支持的命令，请输入 h 或 help 查看帮助',
+                                        '1')
+
+
+def recvmsg2dic():
+    """parse received message to dictionary
+    """
+    recvmsg = request.body.read()
+    root = ET.fromstring(recvmsg)
+    msg_dic = {}
+    for child in root:
+        msg_dic[child.tag] = child.text
+    return msg_dic
+
+
+def handle_post(msg_dic):
+    if msg_dic['MsgType'] != 'text':  # only support text post
+        return settings.RESPONSE_TXT % (msg_dic['FromUserName'],
+                                        msg_dic['ToUserName'],
+                                        str(int(time.time())),
+                                        'text',
+                                        u'抱歉,目前只支持文本消息查询',
+                                        '1')
+    else:  # text type post
+        content = msg_dic['Content']
+        resp = ResponsePost(msg_dic)
+        if content in settings.KEYWORDS_DIC['help']:
+            return resp.help_info()
+        if content in settings.KEYWORDS_DIC['btc']:
+            return resp.btc()
+        if content in settings.KEYWORDS_DIC['ltc']:
+            return resp.ltc()
+        if content in settings.KEYWORDS_DIC['mtgox']:
+            return resp.mtgox()
+        if content in settings.KEYWORDS_DIC['btce']:
+            return resp.btce()
+        if content in settings.KEYWORDS_DIC['btcchina']:
+            return resp.btcchina()
+        if content in settings.KEYWORDS_DIC['42btc']:
+            return resp.cn42btc()
+
+        return resp.others()
+
+
+@get('/btchelper')
+def check_signature():
+    """check if the get request was from winxin.
+
+        1.sorting signature,timestamp,nonce
+        2.sha1 the three args
+        3.return echoStr to winxin
+    """
+    global TOKEN
+    signature = request.GET.get("signature", None)
+    timestamp = request.GET.get("timestamp", None)
+    nonce = request.GET.get("nonce", None)
+    echoStr = request.GET.get("echostr", None)
+
+    token = TOKEN
+    tmpList = [token, timestamp, nonce]
+    tmpList.sort()
+    tmpstr = "%s%s%s" % tuple(tmpList)
+    tmpstr = hashlib.sha1(tmpstr).hexdigest()
+    print tmpstr
+    if tmpstr == signature:
+        return echoStr
+    else:
+        return 'signature wrong!!'
+
+
+@post('/btchelper')
+def response_post():
+    msg_dic = recvmsg2dic()
+    return handle_post(msg_dic)
+
+
+if __name__ == "__main__":
+    # bottle run mode
+    debug(True)
+    run(host='0.0.0.0', port=8080, reloader=True)
+else:
+    # Mod WSGI launch
+    import sae
+    debug(True)
+    os.chdir(os.path.dirname(__file__))
+    app = default_app()
+    application = sae.create_wsgi_app(app)
