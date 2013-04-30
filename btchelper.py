@@ -1,5 +1,5 @@
 #encoding=utf-8
-from bottle import request, get, post, debug, run
+from bottle import request, get, post, debug, run, default_app
 import hashlib
 import time
 import xml.etree.ElementTree as ET
@@ -183,4 +183,11 @@ def response_post():
 if __name__ == "__main__":
     # bottle run mode
     debug(True)
-    run(host='0.0.0.0', port=8080, reloader=True)
+    run(host='0.0.0.0', port=8002, reloader=True)
+else:
+    import os
+    # Change working directory so relative paths (and template lookup) work again
+    os.chdir(os.path.dirname(__file__))
+
+    # Do NOT use bottle.run() with mod_wsgi
+    application = default_app()
