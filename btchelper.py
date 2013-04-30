@@ -35,7 +35,7 @@ class ResponsePost():
                     \t比特币实时价格汇总 -- 'btc' 或 '比特币'
                     \tmtgox实时交易信息  -- 'mtgox' 或 'mt' 或 'gox'
                     \tbtc-e实时交易信息  -- 'btce' 或 'btc-e'
-                \n
+                \r\n\r\n
                 正在开发中的查询命令:
                     \t利特币实时价格汇总 -- 'ltc' 或 '利特币'
                     \tbtcchina实时交易信息 -- 'btcc' 或 'btcchina'
