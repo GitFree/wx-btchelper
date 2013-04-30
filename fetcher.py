@@ -15,7 +15,7 @@ class Fetcher(object):
         self.name = name  # fetcher name
         self.logger_init()
         self.logger = logging.getLogger(self.name)
-        self.logger.info(self.name + '__init__')
+        #self.logger.info(self.name + '__init__')
 
     def logger_init(self):
         logger = logging.getLogger(self.name)

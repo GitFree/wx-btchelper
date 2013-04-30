@@ -1,0 +1,13 @@
+<uwsgi>
+    <socket>127.0.0.1:8002</socket>
+    <master/>
+    <processes>2</processes>
+    <chdir>/srv/www/nginx/btchelper</chdir>
+    <pythonpath>..</pythonpath>
+    <module>wsgi</module>
+    <enable-threads>true</enable-threads>
+    <pidfile>/tmp/uwsgi/btchelper.pid</pidfile>
+    <daemonize>/var/log/uwsgi/btchelper.log</daemonize>
+    <reload-on-as>90</reload-on-as>
+</uwsgi>
+
