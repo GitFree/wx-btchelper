@@ -158,7 +158,7 @@ class BTCE(Fetcher):
         if self.ticker is None:
             self.error = u'访问%s时发生网络故障' % name
             # raise a web or website error exception
-        elif not self.ticker.has_key)('ticker'):
+        elif not self.ticker.has_key('ticker'):
             self.error = u'%s返回非预期的响应' % name
             # raise a wrong response content exception
 
