@@ -21,10 +21,10 @@ class ResponsePost():
         """支持的查询命令：
            比特币实时价格汇总   -- 输入 'btc' 或 '比特币' 或 '价格'
            利特币实时价格汇总   -- 输入 'ltc' 或 '利特币'
-           mtgox实时交易信息    -- 输入 'mtgox' 或 'mt' 或 'gox'
-           btc-e实时交易信息    -- 输入 'btce' 或 'btc-e'
-           btcchina实时交易信息 -- 输入 'btcc' 或 'btcchina'
-           42btc实时交易信息    -- 输入'42btc'
+           MtGox实时交易信息    -- 输入 'mtgox' 或 'mt' 或 'gox'
+           BTC-E实时交易信息    -- 输入 'btce' 或 'btc-e'
+           BTCChina实时交易信息 -- 输入 'btcc' 或 'btcchina'
+           42BTC实时交易信息    -- 输入'42btc'
         """
         return settings.RESPONSE_TXT % (
             self.msg_dic['FromUserName'],
@@ -33,13 +33,13 @@ class ResponsePost():
             'text',
             u"""目前支持的命令：
                     \t比特币实时价格汇总 -- 'btc' 或 '比特币'
-                    \tmtgox实时交易信息  -- 'mtgox' 或 'mt' 或 'gox'
-                    \tbtc-e实时交易信息  -- 'btce' 或 'btc-e'
+                    \tMtGox实时交易信息  -- 'mtgox' 或 'mt' 或 'gox'
+                    \tBTC-E实时交易信息  -- 'btce' 或 'btc-e'
                 \r\n
-                正在开发中的查询命令:
+                正在开发中的命令:
                     \t利特币实时价格汇总 -- 'ltc' 或 '利特币'
-                    \tbtcchina实时交易信息 -- 'btcc' 或 'btcchina'
-                    \t42btc实时交易信息  -- '42btc'
+                    \tBTCChina实时交易信息 -- 'btcc' 或 'btcchina'
+                    \t42BTC实时交易信息  -- '42btc'
                 """,
             '1')
 
