@@ -5,7 +5,7 @@ import os
 import time
 import xml.etree.ElementTree as ET
 import settings
-from fetcher import Mtgox
+from fetcher import Mtgox, BTCE
 
 
 TOKEN = '55ac87b3ffb018bd583248873385f775'
@@ -55,22 +55,44 @@ class ResponsePost():
             '0')
 
     def btc(self):
-        pass
+        mt = Mtgox()
+        btce = BTCE()
+        content = u"""比特币实时价格：
+        MtGox实时价格：%s
+        MtGox日成交量：%s
+
+        BTC-E实时价格：$%s
+        BTC-E日成交量：%s BTC""" %\
+            (mt.last_all, mt.volume, btce.last_all, btce.volume)
+        return self.response_txt(content)
 
     def ltc(self):
         pass
 
     def mtgox(self):
         mt = Mtgox()
-        content = u"""最新成交价:%s
-        最高成交价:%s
-        最低成交价:%s
+        content = u"""MtGox实时信息：
+        最新成交价：%s
         今日成交量：%s
-        加权平均价:%s""" % (mt.last_all, mt.high, mt.low, mt.volume, mt.vwap)
+        最高成交价：%s
+        最低成交价：%s
+        最新买入价：%s
+        最新卖出价：%s
+        加权平均价：%s""" %\
+            (mt.last_all, mt.volume, mt.high, mt.low, mt.last_buy, mt.last_sell, mt.vwap)
         return self.response_txt(content)
 
     def btce(self):
-        pass
+        btce = BTCE()
+        content = u"""BTC-E实时价格
+        最新成交价：$%s
+        今日成交量：%s BTC
+        最高成交价：$%s
+        最低成交价：$%s
+        最新买入价：$%s
+        最新卖出价：$%s""" %\
+            (btce.last_all, btce.volume, btce.high, btce.low, btce.last_buy, btce.last_sell)
+        return self.response_txt(content)
 
     def btcchina(self):
         pass

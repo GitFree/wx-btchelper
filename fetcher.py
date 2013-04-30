@@ -10,10 +10,9 @@ import logging
 
 
 class Fetcher(object):
-    name = ''  # fetcher name
 
     def __init__(self, name):
-        self.name = name
+        self.name = name  # fetcher name
         self.logger_init()
         self.logger = logging.getLogger(self.name)
         self.logger.info(self.name + '__init__')
@@ -47,23 +46,35 @@ class Fetcher(object):
             else:
                 return None
         except urllib2.HTTPError, e:
-            self.logger.error(e.code)
+            self.logger.error("HTTPError: %d--%s" % (e.code, e.reason))
             return None
         except urllib2.URLError, e:
-            self.logger.error(e.reason)
+            self.logger.error("URLError: %s" + e.reason)
             return None
+
+    def get_ticker(self, ticker_url):
+        ticker_json = self.get_request_result(ticker_url)
+        if ticker_json:  # ticker_json is *not* (None or empty string)
+            return json.loads(ticker_json)
+        else:
+            return None
+
+    @property
+    def nonce(self):
+        if self.error:
+            return self.error
+        return str(int(time.time() * 1e6))
 
 
 class Mtgox(Fetcher):
-    base_url = 'https://data.mtgox.com/api/2'
-    key = '1a5f964c-b849-4db3-b80b-82010aa1c625'  # keyname:btchelper_no_permission
-    secret = 'nAzhkooonbct/epAwJEZZGZ0IqvvKFxErdVJY6/rdVEbcPoeh/IX+6tpiNzmqSAQ2niMKn7kDjxhA3FTWs+VoA=='
-    ticker = None
-    error = ''
+    KEY = '1a5f964c-b849-4db3-b80b-82010aa1c625'  # keyname:btchelper_no_permission
+    SECRET = 'nAzhkooonbct/epAwJEZZGZ0IqvvKFxErdVJY6/rdVEbcPoeh/IX+6tpiNzmqSAQ2niMKn7kDjxhA3FTWs+VoA=='
+    TICKER_URL = 'https://data.mtgox.com/api/2/BTCUSD/money/ticker'
 
     def __init__(self, name='mtgox'):
+        self.error = None
         super(Mtgox, self).__init__(name)
-        self.ticker = self.get_ticker()
+        self.ticker = super(Mtgox, self).get_ticker(self.TICKER_URL)
         if self.ticker is None:
             self.error = u'访问%s时发生网络故障' % name
             # raise a web or website error exception
@@ -71,35 +82,24 @@ class Mtgox(Fetcher):
             self.error = u'%s返回了错误的响应' % name
             # raise a wrong response content exception
 
-    def get_ticker(self):
-        ticker_url = '/BTCUSD/money/ticker'
-        ticker_json = super(Mtgox, self).get_request_result(self.base_url + ticker_url)
-        if ticker_json:
-            return json.loads(ticker_json)
-        else:
-            return None
-
     def get_request_with_auth(self, path, post_data=None):
         hash_data = path + chr(0) + post_data
-        secret = base64.b64decode(self.secret)
+        secret = base64.b64decode(self.SECRET)
         sha512 = hashlib.sha512
         hmac_str = hmac.new(secret, hash_data, sha512).digest()
         header = {
             'User-Agent': 'BTCHelper',
-            'Rest-Key': self.key,
+            'Rest-Key': self.KEY,
             'Rest-Sign': base64.b64encode(hmac_str),
         }
         return urllib2.Request(self.base_url + path, post_data, header)
 
     def get_ticker_with_auth(self):
-        param = {'nonce': self.nonce}
+        param = {'nonce': super.nonce}
         post_data = urllib.urlencode(param)
         request = self.get_request('/BTCUSD/money/ticker', post_data)
         ticker_file = urllib2.urlopen(request, post_data)
         self.ticker = json.loads(ticker_file.read())
-        print '**********************'
-        print self.ticker
-        print '**********************'
         if self.ticker['result'] != 'success':
             pass  # raise a customer exception
 
@@ -123,7 +123,7 @@ class Mtgox(Fetcher):
 
     @property
     def volume(self):
-        """the volume-weighted average price"""
+        """the volume traded today"""
         if self.error:
             return self.error
         return self.ticker['data']['vol']['display_short']
@@ -147,8 +147,54 @@ class Mtgox(Fetcher):
             return self.error
         return self.ticker['data']['sell']['display_short']
 
+
+class BTCE(Fetcher):
+    TICKER_URL = 'https://btc-e.com/api/2/btc_usd/ticker'
+
+    def __init__(self, name='btc-e'):
+        self.error = None
+        super(BTCE, self).__init__(name)
+        self.ticker = super(BTCE, self).get_ticker(self.TICKER_URL)
+        if self.ticker is None:
+            self.error = u'访问%s时发生网络故障' % name
+            # raise a web or website error exception
+        elif not self.ticker.has_key['ticker']:
+            self.error = u'%s返回非预期的响应' % name
+            # raise a wrong response content exception
+
     @property
-    def nonce(self):
+    def last_all(self):
         if self.error:
             return self.error
-        return str(int(time.time() * 1e6))
+        return self.ticker['ticker']['last']
+
+    @property
+    def high(self):
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['high']
+
+    @property
+    def low(self):
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['low']
+
+    @property
+    def volume(self):
+        """the volume traded today"""
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['vol_cur']
+
+    @property
+    def last_buy(self):
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['buy']
+
+    @property
+    def last_sell(self):
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['sell']

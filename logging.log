@@ -48,3 +48,42 @@
 2013-04-27 00:26:08,513 - mtgox - INFO - mtgox__init__
 2013-04-27 00:26:34,552 - mtgox - INFO - mtgox__init__
 2013-04-27 00:26:34,552 - mtgox - INFO - mtgox__init__
+2013-04-30 11:57:24,467 - mtgox - INFO - mtgox__init__
+2013-04-30 12:02:05,361 - mtgox - INFO - mtgox__init__
+2013-04-30 12:09:14,678 - mtgox - INFO - mtgox__init__
+2013-04-30 12:52:01,813 - btc-e - INFO - btc-e__init__
+2013-04-30 12:52:02,937 - btc-e - ERROR - 403
+2013-04-30 12:54:48,490 - btc-e - INFO - btc-e__init__
+2013-04-30 12:54:49,582 - btc-e - ERROR - 403
+2013-04-30 12:55:22,704 - btc-e - INFO - btc-e__init__
+2013-04-30 12:55:22,704 - btc-e - INFO - btc-e__init__
+2013-04-30 12:55:23,401 - btc-e - ERROR - 403
+2013-04-30 12:55:23,401 - btc-e - ERROR - 403
+2013-04-30 12:58:28,421 - btc-e - INFO - btc-e__init__
+2013-04-30 13:01:09,020 - btc-e - INFO - btc-e__init__
+2013-04-30 13:01:10,132 - btc-e - ERROR - HTTPError:Forbidden
+2013-04-30 13:06:53,105 - btc-e - INFO - btc-e__init__
+2013-04-30 13:06:53,105 - btc-e - INFO - btc-e__init__
+2013-04-30 13:06:53,798 - btc-e - ERROR - HTTPError:Forbidden
+2013-04-30 13:06:53,798 - btc-e - ERROR - HTTPError:Forbidden
+2013-04-30 13:09:43,003 - mtgox - INFO - mtgox__init__
+2013-04-30 13:10:28,305 - mtgox - INFO - mtgox__init__
+2013-04-30 13:10:28,305 - mtgox - INFO - mtgox__init__
+2013-04-30 13:11:32,839 - mtgox - INFO - mtgox__init__
+2013-04-30 13:12:40,667 - mtgox - INFO - mtgox__init__
+2013-04-30 13:14:12,375 - mtgox - INFO - mtgox__init__
+2013-04-30 13:14:41,174 - mtgox - INFO - mtgox__init__
+2013-04-30 13:14:41,174 - mtgox - INFO - mtgox__init__
+2013-04-30 13:17:07,538 - mtgox - INFO - mtgox__init__
+2013-04-30 13:17:08,907 - mtgox - ERROR - HTTPError: Not Found
+2013-04-30 13:18:56,272 - mtgox - INFO - mtgox__init__
+2013-04-30 13:18:57,578 - mtgox - ERROR - HTTPError: 404--Not Found
+2013-04-30 13:19:43,421 - mtgox - INFO - mtgox__init__
+2013-04-30 13:20:44,805 - mtgox - INFO - mtgox__init__
+2013-04-30 13:21:43,180 - mtgox - INFO - mtgox__init__
+2013-04-30 13:48:08,934 - mtgox - INFO - mtgox__init__
+2013-04-30 13:48:10,204 - btc-e - INFO - btc-e__init__
+2013-04-30 13:48:10,933 - btc-e - ERROR - HTTPError: 403--Forbidden
+2013-04-30 13:48:39,924 - mtgox - INFO - mtgox__init__
+2013-04-30 13:48:41,224 - btc-e - INFO - btc-e__init__
+2013-04-30 13:48:41,944 - btc-e - ERROR - HTTPError: 403--Forbidden
