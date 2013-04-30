@@ -1,7 +1,6 @@
 #encoding=utf-8
-from bottle import request, get, post, debug, run, default_app
+from bottle import request, get, post, debug, run
 import hashlib
-import os
 import time
 import xml.etree.ElementTree as ET
 import settings
@@ -185,10 +184,3 @@ if __name__ == "__main__":
     # bottle run mode
     debug(True)
     run(host='0.0.0.0', port=8080, reloader=True)
-else:
-    # Mod WSGI launch
-    import sae
-    debug(True)
-    os.chdir(os.path.dirname(__file__))
-    app = default_app()
-    application = sae.create_wsgi_app(app)
