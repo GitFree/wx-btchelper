@@ -4,6 +4,9 @@ import os
 os.chdir(os.path.dirname(__file__))
 
 import bottle
+
 # ... build or import your bottle application here ...
+import btchelper
+
 # Do NOT use bottle.run() with mod_wsgi
 application = bottle.default_app()

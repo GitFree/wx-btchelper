@@ -2,9 +2,10 @@
     <socket>127.0.0.1:8002</socket>
     <master/>
     <processes>2</processes>
+    <plugins>python</plugins>
     <chdir>/srv/www/nginx/btchelper</chdir>
     <pythonpath>..</pythonpath>
-    <module>btchelper</module>
+    <module>wsgi</module>
     <enable-threads>true</enable-threads>
     <pidfile>/tmp/uwsgi/btchelper.pid</pidfile>
     <daemonize>/var/log/uwsgi/btchelper.log</daemonize>

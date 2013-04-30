@@ -166,3 +166,4 @@ pip-log.txt
 ## gitfree
 #############
 env/
+logging.log
