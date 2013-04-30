@@ -57,6 +57,7 @@ class ResponsePost():
         mt = Mtgox()
         btce = BTCE()
         content = u"""比特币实时价格汇总
+        --------------------
         MtGox实时价格：%s
         MtGox日成交量：%s
         \r\n
@@ -70,8 +71,7 @@ class ResponsePost():
 
     def mtgox(self):
         mt = Mtgox()
-        content = u"""
-        MtGox实时信息
+        content = u"""MtGox实时信息
         ---------------
         最新成交价：%s
         今日成交量：%s
@@ -86,6 +86,7 @@ class ResponsePost():
     def btce(self):
         btce = BTCE()
         content = u"""BTC-E实时价格
+        ---------------
         最新成交价：$%s
         今日成交量：%s BTC
         最高成交价：$%s
