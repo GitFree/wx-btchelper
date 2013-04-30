@@ -31,15 +31,15 @@ class ResponsePost():
             self.msg_dic['ToUserName'],
             int(time.time()),
             'text',
-            u"""目前已支持查询命令：
-                    比特币实时价格汇总   -- 输入 'btc' 或 '比特币'
-
+            u"""目前支持的命令：
+                    \t比特币实时价格汇总 -- 'btc' 或 '比特币'
+                    \tmtgox实时交易信息  -- 'mtgox' 或 'mt' 或 'gox'
+                    \tbtc-e实时交易信息  -- 'btce' 或 'btc-e'
+                \n
                 正在开发中的查询命令:
-                    利特币实时价格汇总   -- 输入 'ltc' 或 '利特币'
-                    mtgox实时交易信息    -- 输入 'mtgox' 或 'mt' 或 'gox'
-                    btc-e实时交易信息    -- 输入 'btce' 或 'btc-e'
-                    btcchina实时交易信息 -- 输入 'btcc' 或 'btcchina'
-                    42btc实时交易信息    -- 输入'42btc'
+                    \t利特币实时价格汇总 -- 'ltc' 或 '利特币'
+                    \tbtcchina实时交易信息 -- 'btcc' 或 'btcchina'
+                    \t42btc实时交易信息  -- '42btc'
                 """,
             '1')
 
@@ -56,10 +56,10 @@ class ResponsePost():
     def btc(self):
         mt = Mtgox()
         btce = BTCE()
-        content = u"""比特币实时价格：
+        content = u"""比特币实时价格汇总
         MtGox实时价格：%s
         MtGox日成交量：%s
-
+        \n
         BTC-E实时价格：$%s
         BTC-E日成交量：%s BTC""" %\
             (mt.last_all, mt.volume, btce.last_all, btce.volume)
@@ -70,7 +70,7 @@ class ResponsePost():
 
     def mtgox(self):
         mt = Mtgox()
-        content = u"""MtGox实时信息：
+        content = u"""MtGox实时信息
         最新成交价：%s
         今日成交量：%s
         最高成交价：%s
