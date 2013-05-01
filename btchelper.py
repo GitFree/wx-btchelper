@@ -43,7 +43,7 @@ class ResponsePost():
        \n--------------------\
        \nMtGox实时价格：%s\
        \nMtGox日交量：%s\
-       \n\
+       \r\n\
        \nBTC-E实时价格：$%s\
        \nBTC-E日成交量：%s BTC" %\
             (mt.last_all, mt.volume, btce.last_all, btce.volume)
