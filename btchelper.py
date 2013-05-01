@@ -108,7 +108,7 @@ def handle_post(msg_dic):
         if msg_dic['Event'] == 'subscribe':  # new user subscribe
             return resp.response_txt(settings.RESPONSE_SUBSCRIBE)
     elif msg_dic['MsgType'] != 'text':  # only text post supported
-        return resp.response_txt(settings.RESPONSE_SUBSCRIBE, 1)
+        return resp.response_txt(settings.RESPONSE_UNSUPPORTED_TYPE, 1)
     else:  # text type post received
         content = msg_dic['Content'].lower()
         if content in settings.KEYWORDS_DIC['help']:
