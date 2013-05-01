@@ -70,5 +70,5 @@ RESPONSE_HELP = u"目前支持的命令：\
             \n\
             \r\n正在开发中的命令：\
             \n利特币实时价格汇总 -- ltc 或 利特币\
-            \nBTCChina实时交易信息 -- btcc 或 btcchina\
+            \nBTCChina实时交易 -- btcc 或 btcchina\
             \n42BTC实时交易信息  -- 42btc"
