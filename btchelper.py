@@ -17,41 +17,24 @@ class ResponsePost():
     def nonce():
         return str(int(time.time() * 1e6))
 
-    def help_info(self):
-        """支持的查询命令：
-           比特币实时价格汇总   -- 输入 'btc' 或 '比特币' 或 '价格'
-           利特币实时价格汇总   -- 输入 'ltc' 或 '利特币'
-           MtGox实时交易信息    -- 输入 'mtgox' 或 'mt' 或 'gox'
-           BTC-E实时交易信息    -- 输入 'btce' 或 'btc-e'
-           BTCChina实时交易信息 -- 输入 'btcc' 或 'btcchina'
-           42BTC实时交易信息    -- 输入'42btc'
+    def response_txt(self, content, flag=0):
+        """response a text message
+
+        flag  0--DONT star this message
+              1--star this message
         """
         return settings.RESPONSE_TXT % (
             self.msg_dic['FromUserName'],
             self.msg_dic['ToUserName'],
             int(time.time()),
             'text',
-            u"""目前支持的命令：
-                    \t比特币实时价格汇总 -- 'btc' 或 '比特币'
-                    \tMtGox实时交易信息  -- 'mtgox' 或 'mt' 或 'gox'
-                    \tBTC-E实时交易信息  -- 'btce' 或 'btc-e'
-                \r\n
-                正在开发中的命令:
-                    \t利特币实时价格汇总 -- 'ltc' 或 '利特币'
-                    \tBTCChina实时交易信息 -- 'btcc' 或 'btcchina'
-                    \t42BTC实时交易信息  -- '42btc'
-                """,
-            '1')
-
-    def response_txt(self, content):
-        """response a text message"""
-        return settings.RESPONSE_TXT % (
-            self.msg_dic['FromUserName'],
-            self.msg_dic['ToUserName'],
-            int(time.time()),
-            'text',
             content,
-            '0')
+            flag)
+
+    def help_info(self):
+        """帮助信息
+        """
+        return self.response_txt(settings.RESPONSE_HELP)
 
     def btc(self):
         mt = Mtgox()
@@ -71,15 +54,15 @@ class ResponsePost():
 
     def mtgox(self):
         mt = Mtgox()
-        content = u"""MtGox实时信息
-        ---------------
-        最新成交价：%s
-        今日成交量：%s
-        最高成交价：%s
-        最低成交价：%s
-        最新买入价：%s
-        最新卖出价：%s
-        加权平均价：%s""" %\
+        content = u"MtGox实时信息\
+        \r\n---------------\
+        \r\n最新成交价：%s\
+        \r\n日成交量：%s\
+        \r\n最高成交价：%s\
+        \r\n最低成交价：%s\
+        \r\n最新买入价：%s\
+        \r\n最新卖出价：%s\
+        \r\n加权平均价：%s" %\
             (mt.last_all, mt.volume, mt.high, mt.low, mt.last_buy, mt.last_sell, mt.vwap)
         return self.response_txt(content)
 
@@ -103,12 +86,7 @@ class ResponsePost():
         pass
 
     def others(self):
-        return settings.RESPONSE_TXT % (self.msg_dic['FromUserName'],
-                                        self.msg_dic['ToUserName'],
-                                        str(int(time.time())),
-                                        'text',
-                                        u'尚不支持的命令，输入 h 或 help 查看帮助',
-                                        '1')
+        return self.response_txt(u'不支持的命令，输入 h 或 help 查看帮助', 1)
 
 
 def recvmsg2dic():
@@ -123,16 +101,14 @@ def recvmsg2dic():
 
 
 def handle_post(msg_dic):
-    if msg_dic['MsgType'] != 'text':  # only support text post
-        return settings.RESPONSE_TXT % (msg_dic['FromUserName'],
-                                        msg_dic['ToUserName'],
-                                        str(int(time.time())),
-                                        'text',
-                                        u'抱歉,目前只支持文本消息查询',
-                                        '1')
-    else:  # text type post
+    resp = ResponsePost(msg_dic)
+    if msg_dic['MsgType'] == 'event':
+        if msg_dic['Event'] == 'subscribe':  # new user subscribe
+            return resp.response_txt(settings.RESPONSE_SUBSCRIBE)
+    elif msg_dic['MsgType'] != 'text':  # only text post supported
+        return resp.response_txt(settings.RESPONSE_SUBSCRIBE, 1)
+    else:  # text type post received
         content = msg_dic['Content']
-        resp = ResponsePost(msg_dic)
         if content in settings.KEYWORDS_DIC['help']:
             return resp.help_info()
         if content in settings.KEYWORDS_DIC['btc']:

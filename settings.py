@@ -19,7 +19,7 @@ RESPONSE_TXT = '''
                 <CreateTime>%s</CreateTime>
                 <MsgType><![CDATA[%s]]></MsgType>
                 <Content><![CDATA[%s]]></Content>
-                <FuncFlag>%s</FuncFlag>
+                <FuncFlag>%d</FuncFlag>
             </xml>
             '''
 
@@ -49,7 +49,6 @@ RESPONSE_TXT_PIC = """
             </xml>
             """
 
-
 KEYWORDS_DIC = {
     'help': ('help', 'h', '?', '？', u'帮助',),
     'btc': ('btc', u'比特币', u'汇率', u'价格',),
@@ -59,3 +58,17 @@ KEYWORDS_DIC = {
     'btcchina': ('btcc', 'btcchina',),
     '42btc': ('42btc',),
 }
+
+RESPONSE_SUBSCRIBE = u"欢迎关注比特币助手，比特币助手可以随时随地查询比特币、利特币实时价格，\
+                        不定期推送比特币、利特币最新资讯。\
+                        \r\n输入h或help查看帮助。"
+
+RESPONSE_HELP = u"目前支持的命令：\
+            \r\n\t比特币实时价格汇总 -- btc 或 比特币\
+            \r\n\tMtGox实时交易信息  -- mtgox 或 mt 或 gox\
+            \r\nBTC-E实时交易信息  -- btce 或 btc-e\
+            \r\n\
+            正在开发中的命令:\
+            \r\n\t利特币实时价格汇总 -- ltc 或 利特币\
+            \r\nBTCChina实时交易信息 -- btcc 或 btcchina\
+            \r\n42BTC实时交易信息  -- 42btc"
