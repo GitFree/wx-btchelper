@@ -39,13 +39,13 @@ class ResponsePost():
     def btc(self):
         mt = Mtgox()
         btce = BTCE()
-        content = u"""比特币实时价格汇总
-        --------------------
-        MtGox实时价格：%s
-        MtGox日成交量：%s
-        \r\n
-        BTC-E实时价格：$%s
-        BTC-E日成交量：%s BTC""" %\
+        content = u"比特币实时价格汇总\
+       \r\n--------------------\
+       \r\nMtGox实时价格：%s\
+       \r\nMtGox日交量：%s\
+       \r\n\
+       \r\nBTC-E实时价格：$%s\
+       \r\nBTC-E日成交量：%s BTC" %\
             (mt.last_all, mt.volume, btce.last_all, btce.volume)
         return self.response_txt(content)
 
@@ -57,26 +57,28 @@ class ResponsePost():
         content = u"MtGox实时信息\
         \r\n---------------\
         \r\n最新成交价：%s\
-        \r\n日成交量：%s\
+        \r\n日交量：%s\
         \r\n最高成交价：%s\
         \r\n最低成交价：%s\
         \r\n最新买入价：%s\
         \r\n最新卖出价：%s\
         \r\n加权平均价：%s" %\
-            (mt.last_all, mt.volume, mt.high, mt.low, mt.last_buy, mt.last_sell, mt.vwap)
+            (mt.last_all, mt.volume, mt.high, mt.low,
+             mt.last_buy, mt.last_sell, mt.vwap)
         return self.response_txt(content)
 
     def btce(self):
         btce = BTCE()
-        content = u"""BTC-E实时价格
-        ---------------
-        最新成交价：$%s
-        今日成交量：%s BTC
-        最高成交价：$%s
-        最低成交价：$%s
-        最新买入价：$%s
-        最新卖出价：$%s""" %\
-            (btce.last_all, btce.volume, btce.high, btce.low, btce.last_buy, btce.last_sell)
+        content = u"BTC-E实时信息\
+        \r\n---------------\
+        \r\n最新成交价：$%s\
+        \r\n日交量：%s BTC\
+        \r\n最高成交价：$%s\
+        \r\n最低成交价：$%s\
+        \r\n最新买入价：$%s\
+        \r\n最新卖出价：$%s" %\
+            (btce.last_all, btce.volume, btce.high,
+                btce.low, btce.last_buy, btce.last_sell)
         return self.response_txt(content)
 
     def btcchina(self):
@@ -108,7 +110,7 @@ def handle_post(msg_dic):
     elif msg_dic['MsgType'] != 'text':  # only text post supported
         return resp.response_txt(settings.RESPONSE_SUBSCRIBE, 1)
     else:  # text type post received
-        content = msg_dic['Content']
+        content = msg_dic['Content'].lower()
         if content in settings.KEYWORDS_DIC['help']:
             return resp.help_info()
         if content in settings.KEYWORDS_DIC['btc']:
