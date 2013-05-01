@@ -54,15 +54,16 @@ class ResponsePost():
 
     def mtgox(self):
         mt = Mtgox()
-        content = u"MtGox实时信息\
-        ---------------\
-        最新成交价：%s\
-        日交量：%s\
-        最高成交价：%s\
-        最低成交价：%s\
-        最新买入价：%s\
-        最新卖出价：%s\
-        加权平均价：%s" %\
+        content = u"\
+        MtGox实时信息\
+        \r\n---------------\
+        \r\n最新成交价：%s\
+        \r\n日交量：%s\
+        \r\n最高成交价：%s\
+        \r\n最低成交价：%s\
+        \r\n最新买入价：%s\
+        \r\n最新卖出价：%s\
+        \r\n加权平均价：%s" %\
             (mt.last_all, mt.volume, mt.high, mt.low,
              mt.last_buy, mt.last_sell, mt.vwap)
         return self.response_txt(content)
