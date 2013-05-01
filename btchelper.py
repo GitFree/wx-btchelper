@@ -54,8 +54,7 @@ class ResponsePost():
 
     def mtgox(self):
         mt = Mtgox()
-        content = u"\
-        MtGox实时信息\
+        content = u"MtGox实时信息\
         \r\n---------------\
         \r\n最新成交价：%s\
         \r\n日交量：%s\
