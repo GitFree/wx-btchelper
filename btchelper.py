@@ -40,12 +40,12 @@ class ResponsePost():
         mt = Mtgox()
         btce = BTCE()
         content = u"比特币实时价格汇总\
-       \r--------------------\
-       \rMtGox实时价格：%s\
-       \rMtGox日交量：%s\
+       \n--------------------\
+       \nMtGox实时价格：%s\
+       \nMtGox日交量：%s\
        \r\n\
-       \rBTC-E实时价格：$%s\
-       \rBTC-E日交量：%s BTC" %\
+       \nBTC-E实时价格：$%s\
+       \nBTC-E日交量：%s BTC" %\
             (mt.last_all, mt.volume, btce.last_all, btce.volume)
         return self.response_txt(content)
 
