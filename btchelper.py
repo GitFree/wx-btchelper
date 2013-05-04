@@ -40,12 +40,12 @@ class ResponsePost():
         mt = Mtgox()
         btce = BTCE()
         content = u"比特币实时价格汇总\
-       \n--------------------\
-       \nMtGox实时价格：%s\
-       \nMtGox日交量：%s\
+       \r--------------------\
+       \rMtGox实时价格：%s\
+       \rMtGox日交量：%s\
        \r\n\
-       \nBTC-E实时价格：$%s\
-       \nBTC-E日交量：%s BTC" %\
+       \rBTC-E实时价格：$%s\
+       \rBTC-E日交量：%s BTC" %\
             (mt.last_all, mt.volume, btce.last_all, btce.volume)
         return self.response_txt(content)
 
@@ -88,7 +88,7 @@ class ResponsePost():
         pass
 
     def others(self):
-        return self.response_txt(u'不支持的命令，输入 h 或 help 查看帮助', 1)
+        return self.response_txt(u'不支持的命令，输入 h 或 help 查看帮助。', 1)
 
 
 def recvmsg2dic():
@@ -110,7 +110,7 @@ def handle_post(msg_dic):
     elif msg_dic['MsgType'] != 'text':  # only text post supported
         return resp.response_txt(settings.RESPONSE_UNSUPPORTED_TYPE, 1)
     else:  # text type post received
-        content = msg_dic['Content'].lower()
+        content = msg_dic['Content'].lower().strip()
         if content in settings.KEYWORDS_DIC['help']:
             return resp.help_info()
         if content in settings.KEYWORDS_DIC['btc']:

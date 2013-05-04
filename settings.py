@@ -63,7 +63,8 @@ RESPONSE_SUBSCRIBE = u"欢迎关注比特币助手！比特币助手让您可以
 并且不定期推送比特币、利特币最新资讯。\
         \r\n输入h或help查看帮助。"
 
-RESPONSE_UNSUPPORTED_TYPE = u"不支持的消息类型，目前仅支持文本格式消息。"
+RESPONSE_UNSUPPORTED_TYPE = u"不支持的消息类型，目前仅支持文本格式消息。\
+        \r\n输入h或help查看帮助。"
 
 RESPONSE_HELP = u"目前支持的命令：\
             \n比特币实时价格汇总 -- btc 或 比特币\
