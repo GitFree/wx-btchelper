@@ -67,11 +67,11 @@ RESPONSE_UNSUPPORTED_TYPE = u"不支持的消息类型，目前仅支持文本�
         \r\n输入h或help查看帮助。"
 
 RESPONSE_HELP = u"目前支持的命令：\
-            \n比特币实时价格汇总 -- btc 或 比特币\
-            \nMtGox实时交易信息  -- mtgox 或 mt 或 gox\
-            \nBTC-E实时交易信息  -- btce 或 btc-e\
-            \n\
-            \r\n正在开发中的命令：\
-            \n利特币实时价格汇总 -- ltc 或 利特币\
-            \nBTCChina实时交易 -- btcc 或 btcchina\
-            \n42BTC实时交易信息  -- 42btc"
+            \n【btc】比特币实时价格汇总\
+            \n【mt】MtGox实时交易信息\
+            \n【btce】BTC-E实时交易信息\
+            \r\n\
+            \n正在开发中的命令：\
+            \n【ltc】利特币实时价格汇总\
+            \n【btcc】BTCChina实时交易\
+            \n【42btc】42BTC实时交易信息"
