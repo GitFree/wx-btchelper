@@ -66,12 +66,12 @@ RESPONSE_SUBSCRIBE = u"欢迎关注比特币助手！比特币助手让您可以
 RESPONSE_UNSUPPORTED_TYPE = u"不支持的消息类型，目前仅支持文本格式消息。\
         \r\n输入h或help查看帮助。"
 
-RESPONSE_HELP = u"目前支持的命令：\
-            \n【btc】比特币实时价格汇总\
-            \n【mt】MtGox实时交易信息\
-            \n【btce】BTC-E实时交易信息\
-            \r\n\
-            \n正在开发中的命令：\
-            \n【ltc】利特币实时价格汇总\
-            \n【btcc】BTCChina实时交易\
-            \n【42btc】42BTC实时交易信息"
+RESPONSE_HELP = u"目前支持的命令：\n\
+        【btc】比特币实时价格汇总\n\
+        【mt】MtGox实时交易信息\n\
+        【btce】BTC-E实时交易信息\
+        \r\n\
+        正在开发中的命令：\n\
+        【ltc】利特币实时价格汇总\n\
+        【btcc】BTCChina实时交易\n\
+        【42btc】42BTC实时交易信息"
