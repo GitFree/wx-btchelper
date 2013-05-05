@@ -40,24 +40,23 @@ class ResponsePost():
         mt = Mtgox()
         btce = BTCE()
         content = u"比特币实时价格汇总\
-       \n--------------------\
-       \nMtGox实时价格：%.2f\
-       \nMtGox日交量：%.2f\
-       \r\n\
-       \nBTC-E实时价格：$%.2f\
-       \nBTC-E日交量：%.2f BTC" %\
+                \r\n--------------------\
+                \r\nMtGox实时价格：%.2f\
+                \r\nMtGox日交量：%.2f\
+                \r\n\
+                \r\nBTC-E实时价格：$%.2f\
+                \r\nBTC-E日交量：%.2f BTC" %\
             (mt.last_all, mt.volume, btce.last_all, btce.volume)
         return self.response_txt(content)
 
     def ltc(self):
         btce_ltcusd = BTCE(coin='ltc_usd')
         btce_ltcbtc = BTCE(coin='ltc_btc')
-        content = u"\
-                利特币实时价格汇总\n\
-                ------------------\
-                BTC-E实时价格1：$%.2f\n\
-                BTC-E实时价格2：%.2f BTC\n\
-                BTC-E日交量：$%.2f LTC" %\
+        content = u"利特币实时价格汇总\
+                \r\n------------------\
+                \r\nBTC-E实时价格1：$%.2f\
+                \r\nBTC-E实时价格2：%.2f BTC\
+                \r\nBTC-E日交量：$%.2f LTC" %\
             (btce_ltcusd.last_all, btce_ltcbtc.last_all,
              btce_ltcbtc.volume + btce_ltcbtc.volume)
         return self.response_txt(content)

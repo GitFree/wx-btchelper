@@ -62,23 +62,22 @@ KEYWORDS_DIC = {
 
 RESPONSE_SUBSCRIBE = u"欢迎关注比特币助手！比特币助手让您可以随时随地查询比特币、利特币实时价格，\
 并且不定期推送比特币、利特币最新资讯。\
-        \r\n输入h或help查看帮助。"
+\r\n输入h或help查看帮助。"
 
 RESPONSE_UNSUPPORTED_TYPE = u"不支持的消息类型，目前仅支持文本格式消息。\
-        \r\n输入h或help查看帮助。"
+\r\n输入h或help查看帮助。"
 
+# compatible display style with both android and ios
 RESPONSE_HELP = u"【btc】比特币实时价格汇总\
 \r\n【ltc】利特币实时价格汇总\
 \r\n【mt】MtGox实时交易信息\
 \r\n【btce】BTC-E实时交易信息\
 \r\n【todo】正在开发的命令"
 
-RESPONSE_TODO = u"正在开发的命令：\n\
-        【ltc】利特币实时价格汇总\n\
-        【btcc】BTCChina实时交易\n\
-        【btcc】BTCChina实时交易\n\
-        【fxbtc】FXBTC实时交易信息\n\
-        以美元/人民币价格显示\n\
-        最近n分钟/小时/天价格\n\
-        24小时价格走势图\n\
-        N天价格走势图\n"
+RESPONSE_TODO = u"正在开发的命令：\
+\r\n【btcc】BTCChina实时交易\
+\r\n【fxbtc】FXBTC实时交易信息\
+\r\n以美元/人民币价格显示\
+\r\n最近n分钟/小时/天价格\
+\r\n24小时价格走势图\
+\r\nN天价格走势图\n"
