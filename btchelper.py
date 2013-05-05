@@ -40,7 +40,7 @@ class ResponsePost():
         mt = Mtgox()
         btce = BTCE()
         content = u"比特币实时价格汇总\
-                \r\n--------------------\
+                \r\n------------------\
                 \r\nMtGox实时价格：%s\
                 \r\nMtGox日交量：%s\
                 \r\
@@ -64,14 +64,14 @@ class ResponsePost():
     def mtgox(self):
         mt = Mtgox()
         content = u"MtGox实时信息\
-        \n---------------\
-        \n最新成交价：%s\
-        \n日交量：%s\
-        \n最高成交价：%s\
-        \n最低成交价：%s\
-        \n最新买入价：%s\
-        \n最新卖出价：%s\
-        \n加权平均价：%s" %\
+                \r\n---------------\
+                \r\n最新成交价：%s\
+                \r\n日交量：%s\
+                \r\n最高成交价：%s\
+                \r\n最低成交价：%s\
+                \r\n最新买入价：%s\
+                \r\n最新卖出价：%s\
+                \r\n加权平均价：%s" %\
             (mt.last_all, mt.volume, mt.high, mt.low,
              mt.last_buy, mt.last_sell, mt.vwap)
         return self.response_txt(content)
@@ -79,13 +79,13 @@ class ResponsePost():
     def btce(self):
         btce = BTCE()
         content = u"BTC-E实时信息\
-        \n---------------\
-        \n最新成交价：$%.2f\
-        \n日交量：%.2f BTC\
-        \n最高成交价：$%.2f\
-        \n最低成交价：$%.2f\
-        \n最新买入价：$%.2f\
-        \n最新卖出价：$%.2f" %\
+                \r\n---------------\
+                \r\n最新成交价：$%.2f\
+                \r\n日交量：%.2f BTC\
+                \r\n最高成交价：$%.2f\
+                \r\n最低成交价：$%.2f\
+                \r\n最新买入价：$%.2f\
+                \r\n最新卖出价：$%.2f" %\
             (btce.last_all, btce.volume, btce.high,
                 btce.low, btce.last_buy, btce.last_sell)
         return self.response_txt(content)
