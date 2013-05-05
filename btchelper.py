@@ -91,10 +91,10 @@ class ResponsePost():
         return self.response_txt(content)
 
     def btcchina(self):
-        pass
+        return self.response_txt(u'暂不支持的命令，输入 h 或 help 查看帮助。', 1)
 
     def cn42btc(self):
-        pass
+        return self.response_txt(u'暂不不支持的命令，输入 h 或 help 查看帮助。', 1)
 
     def todo(self):
         """TODO list"""
