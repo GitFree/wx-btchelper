@@ -41,8 +41,8 @@ class ResponsePost():
         btce = BTCE()
         content = u"比特币实时价格汇总\
                 \r\n--------------------\
-                \r\nMtGox实时价格：%.2f\
-                \r\nMtGox日交量：%.2f\
+                \r\nMtGox实时价格：%s\
+                \r\nMtGox日交量：%s\
                 \r\n\
                 \r\nBTC-E实时价格：$%.2f\
                 \r\nBTC-E日交量：%.2f BTC" %\
@@ -55,7 +55,7 @@ class ResponsePost():
         content = u"利特币实时价格汇总\
                 \r\n------------------\
                 \r\nBTC-E实时价格1：$%.2f\
-                \r\nBTC-E实时价格2：%.2f BTC\
+                \r\nBTC-E实时价格2：%.4f BTC\
                 \r\nBTC-E日交量：$%.2f LTC" %\
             (btce_ltcusd.last_all, btce_ltcbtc.last_all,
              btce_ltcbtc.volume + btce_ltcbtc.volume)
