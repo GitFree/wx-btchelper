@@ -68,6 +68,7 @@ RESPONSE_UNSUPPORTED_TYPE = u"不支持的消息类型，目前仅支持文本�
         \r\n输入h或help查看帮助。"
 
 RESPONSE_HELP = u"\【btc】比特币实时价格汇总\r\n\
+        【ltc】利特币实时价格汇总\r\n\
         【mt】MtGox实时交易信息\r\n\
         【btce】BTC-E实时交易信息\r\n\
         【todo】正在开发的命令"
