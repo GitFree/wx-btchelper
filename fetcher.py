@@ -149,16 +149,17 @@ class Mtgox(Fetcher):
 
 
 class BTCE(Fetcher):
-    TICKER_URL = 'https://btc-e.com/api/2/btc_usd/ticker'
+    TICKER_URL = 'https://btc-e.com/api/2/%s/ticker'
 
-    def __init__(self, name='btc-e'):
+    def __init__(self, name='btc-e', coin='btc_usd'):
         self.error = None
         super(BTCE, self).__init__(name)
-        self.ticker = super(BTCE, self).get_ticker(self.TICKER_URL)
+        self.ticker = super(BTCE, self).get_ticker(self.TICKER_URL % coin)
+
         if self.ticker is None:
             self.error = u'访问%s时发生网络故障' % name
             # raise a web or website error exception
-        elif not self.ticker.has_key('ticker'):
+        elif 'ticker' not in self.ticker:
             self.error = u'%s返回非预期的响应' % name
             # raise a wrong response content exception
 

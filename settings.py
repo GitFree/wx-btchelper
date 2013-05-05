@@ -77,7 +77,7 @@ RESPONSE_TODO = u"正在开发的命令：\n\
         【ltc】利特币实时价格汇总\n\
         【btcc】BTCChina实时交易\n\
         【btcc】BTCChina实时交易\n\
-        【42btc】42BTC实时交易信息\n\
+        【fxbtc】FXBTC实时交易信息\n\
         以美元/人民币价格显示\n\
         最近n分钟/小时/天价格\n\
         24小时价格走势图\n\
