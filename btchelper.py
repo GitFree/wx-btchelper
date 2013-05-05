@@ -87,6 +87,10 @@ class ResponsePost():
     def cn42btc(self):
         pass
 
+    def todo(self):
+        """TODO list"""
+        return self.response_txt(settings.RESPONSE_TODO)
+
     def others(self):
         return self.response_txt(u'不支持的命令，输入 h 或 help 查看帮助。', 1)
 
@@ -125,6 +129,8 @@ def handle_post(msg_dic):
             return resp.btcchina()
         if content in settings.KEYWORDS_DIC['42btc']:
             return resp.cn42btc()
+        if content in settings.KEYWORDS_DIC['todo']:
+            return resp.todo()
 
         return resp.others()
 

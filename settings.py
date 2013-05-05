@@ -57,6 +57,7 @@ KEYWORDS_DIC = {
     'btce': ('btce', 'btc-e',),
     'btcchina': ('btcc', 'btcchina',),
     '42btc': ('42btc',),
+    'todo': ('todo',),
 }
 
 RESPONSE_SUBSCRIBE = u"欢迎关注比特币助手！比特币助手让您可以随时随地查询比特币、利特币实时价格，\
@@ -66,12 +67,18 @@ RESPONSE_SUBSCRIBE = u"欢迎关注比特币助手！比特币助手让您可以
 RESPONSE_UNSUPPORTED_TYPE = u"不支持的消息类型，目前仅支持文本格式消息。\
         \r\n输入h或help查看帮助。"
 
-RESPONSE_HELP = u"目前支持的命令：\n\
+RESPONSE_HELP = u"\
         【btc】比特币实时价格汇总\n\
         【mt】MtGox实时交易信息\n\
         【btce】BTC-E实时交易信息\
-        \r\n\
-        正在开发中的命令：\n\
+        【todo】正在开发的命令"
+
+RESPONSE_TODO = u"正在开发的命令：\n\
         【ltc】利特币实时价格汇总\n\
         【btcc】BTCChina实时交易\n\
-        【42btc】42BTC实时交易信息"
+        【btcc】BTCChina实时交易\n\
+        【42btc】42BTC实时交易信息\n\
+        以美元/人民币价格显示\n\
+        最近n分钟/小时/天价格\n\
+        24小时价格走势图\n\
+        N天价格走势图\n"
