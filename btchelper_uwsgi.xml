@@ -10,4 +10,7 @@
     <pidfile>/tmp/uwsgi/btchelper.pid</pidfile>
     <daemonize>/var/log/uwsgi/btchelper.log</daemonize>
     <reload-on-as>90</reload-on-as>
+    <touch-reload>/srv/www/nginx/btchelper/settings.py</touch-reload>
+    <touch-reload>/srv/www/nginx/btchelper/btchelper.py</touch-reload>
+    <touch-reload>/srv/www/nginx/btchelper/fetcher.py</touch-reload>
 </uwsgi>

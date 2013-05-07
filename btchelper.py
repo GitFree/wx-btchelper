@@ -40,7 +40,7 @@ class ResponsePost():
         mt = Mtgox()
         btce = BTCE()
         content = u"比特币实时价格汇总\
-                \r\n------------------\
+                \r\n----------------\
                 \r\nMtGox实时价格：%s\
                 \r\nMtGox日交量：%s\
                 \r\
@@ -53,7 +53,7 @@ class ResponsePost():
         btce_ltcusd = BTCE(coin='ltc_usd')
         btce_ltcbtc = BTCE(coin='ltc_btc')
         content = u"利特币实时价格汇总\
-                \r\n------------------\
+                \r-----------------\
                 \r\nBTC-E实时价格1：$%.2f\
                 \r\nBTC-E实时价格2：%.4f BTC\
                 \r\nBTC-E日交量：$%.2f LTC" %\
@@ -64,7 +64,7 @@ class ResponsePost():
     def mtgox(self):
         mt = Mtgox()
         content = u"MtGox实时信息\
-                \r\n---------------\
+                \r---------------\
                 \r\n最新成交价：%s\
                 \r\n日交量：%s\
                 \r\n最高成交价：%s\
