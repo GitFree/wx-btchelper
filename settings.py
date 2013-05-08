@@ -50,7 +50,7 @@ RESPONSE_TXT_PIC = """
             """
 
 KEYWORDS_DIC = {
-    'help': ('help', 'h', '?', '？', u'帮助',),
+    'help': ('help', 'h', '?', u'？', u'帮助',),
     'btc': ('btc', u'比特币', u'汇率', u'价格',),
     'ltc': ('ltc', u'利特币',),
     'mtgox': ('mtgox', 'mt', 'gox'),
