@@ -2,9 +2,6 @@
 import urllib2
 import urllib
 import json
-import hmac
-import base64
-import hashlib
 import time
 import logging
 
@@ -67,8 +64,6 @@ class Fetcher(object):
 
 
 class Mtgox(Fetcher):
-    KEY = '1a5f964c-b849-4db3-b80b-82010aa1c625'  # keyname:btchelper_no_permission
-    SECRET = 'nAzhkooonbct/epAwJEZZGZ0IqvvKFxErdVJY6/rdVEbcPoeh/IX+6tpiNzmqSAQ2niMKn7kDjxhA3FTWs+VoA=='
     TICKER_URL = 'https://data.mtgox.com/api/2/BTCUSD/money/ticker'
 
     def __init__(self, name='mtgox'):
@@ -81,18 +76,6 @@ class Mtgox(Fetcher):
         elif self.ticker['result'] != 'success':
             self.error = u'%s返回了错误的响应' % name
             # raise a wrong response content exception
-
-    def get_request_with_auth(self, path, post_data=None):
-        hash_data = path + chr(0) + post_data
-        secret = base64.b64decode(self.SECRET)
-        sha512 = hashlib.sha512
-        hmac_str = hmac.new(secret, hash_data, sha512).digest()
-        header = {
-            'User-Agent': 'BTCHelper',
-            'Rest-Key': self.KEY,
-            'Rest-Sign': base64.b64encode(hmac_str),
-        }
-        return urllib2.Request(self.base_url + path, post_data, header)
 
     def get_ticker_with_auth(self):
         param = {'nonce': super.nonce}
