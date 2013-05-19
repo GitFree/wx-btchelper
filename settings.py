@@ -51,8 +51,8 @@ RESPONSE_TXT_PIC = """
 
 KEYWORDS_DIC = {
     'help': ('help', 'h', '?', u'？', u'帮助',),
-    'btc': ('btc', u'比特币', u'汇率', u'价格',),
-    'ltc': ('ltc', u'利特币',),
+    'btc': ('btc', 'b', u'比特币', u'汇率', u'价格',),
+    'ltc': ('ltc', 'l', u'利特币',),
     'mtgox': ('mtgox', 'mt', 'gox'),
     'btce': ('btce', 'btc-e',),
     'btcchina': ('btcc', 'btcchina',),
