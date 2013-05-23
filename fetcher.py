@@ -10,30 +10,37 @@ class Fetcher(object):
 
     def __init__(self, name):
         self.name = name  # fetcher name
-        self.logger_init()
-        self.logger = logging.getLogger(self.name)
-        #self.logger.info(self.name + '__init__')
+        self.fh, self.sh = self.logger_init()
+        self.logger = logging.getLogger(name)
+        self.logger.info(self.name + '__init__')
+
+    def __del__(self):  # need more test
+        self.logger.info(self.name + '__del__')
+        self.fh.close()
+        self.logger.removeHandler(self.fh)
+        self.logger.removeHandler(self.sh)
 
     def logger_init(self):
-        logger = logging.getLogger(self.name)
-        logger.setLevel(logging.DEBUG)
-
         # filehandler logging
-        flog = logging.FileHandler('logging.log')
-        flog.setLevel(logging.DEBUG)
-
+        fh = logging.FileHandler('logging.log')
         # console logging
-        clog = logging.StreamHandler()
-        clog.setLevel(logging.DEBUG)
+        sh = logging.StreamHandler()
 
         # handler output formate
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        flog.setFormatter(formatter)
-        clog.setFormatter(formatter)
+        fh.setFormatter(formatter)
+        fh.setLevel(logging.DEBUG)
+        sh.setFormatter(formatter)
+        sh.setLevel(logging.DEBUG)
 
-        # 给logger添加handler
-        logger.addHandler(flog)
-        logger.addHandler(clog)
+        # logger
+        logger = logging.getLogger(self.name)
+        logger.setLevel(logging.DEBUG)
+        # add handler to logger
+        logger.addHandler(fh)
+        logger.addHandler(sh)
+
+        return [fh, sh]
 
     def get_request_result(self, url):
         try:
