@@ -72,12 +72,12 @@ RESPONSE_HELP = u"【btc】比特币实时价格汇总\
 \r\n【ltc】利特币实时价格汇总\
 \r\n【mt】MtGox实时交易信息\
 \r\n【btce】BTC-E实时交易信息\
+\r\n【btcc】BTCChina实时交易\
 \r\n【todo】正在开发的命令\
 \r\
 \r\n任何建议意见请直接留言"
 
 RESPONSE_TODO = u"正在开发的命令：\
-\r\n【btcc】BTCChina实时交易\
 \r\n【fxbtc】FXBTC实时交易信息\
 \r\n【】以美元/人民币价格显示\
 \r\n【】最近n分钟/小时/天价格\
