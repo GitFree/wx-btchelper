@@ -189,3 +189,56 @@ class BTCE(Fetcher):
         if self.error:
             return self.error
         return self.ticker['ticker']['sell']
+
+
+class BTCChina(Fetcher):
+    TICKER_URL = 'https://data.btcchina.com/data/ticker'
+
+    def __init__(self, name='btcchina'):
+        self.error = None
+        super(BTCChina, self).__init__(name)
+        self.ticker = super(BTCChina, self).get_ticker(self.TICKER_URL)
+
+        if self.ticker is None:
+            self.error = u'访问%s时发生网络故障' % name
+            # raise a web or website error exception
+        elif 'ticker' not in self.ticker:
+            self.error = u'%s返回非预期的响应' % name
+            # raise a wrong response content exception
+
+    @property
+    def last_all(self):
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['last']
+
+    @property
+    def high(self):
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['high']
+
+    @property
+    def low(self):
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['low']
+
+    @property
+    def volume(self):
+        """the volume traded today"""
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['vol']
+
+    @property
+    def last_buy(self):
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['buy']
+
+    @property
+    def last_sell(self):
+        if self.error:
+            return self.error
+        return self.ticker['ticker']['sell']

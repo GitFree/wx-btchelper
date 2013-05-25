@@ -4,7 +4,7 @@ import hashlib
 import time
 import xml.etree.ElementTree as ET
 import settings
-from fetcher import Mtgox, BTCE
+from fetcher import Mtgox, BTCE, BTCChina
 
 
 TOKEN = '55ac87b3ffb018bd583248873385f775'
@@ -91,7 +91,18 @@ class ResponsePost():
         return self.response_txt(content)
 
     def btcchina(self):
-        return self.response_txt(u'暂不支持的命令，输入 h 或 help 查看帮助。', 1)
+        btcc = BTCChina()
+        content = u"比特币中国实时信息\
+                \r---------------\
+                \r\n最新成交价：￥%s\
+                \r\n日交量：%.2f BTC\
+                \r\n最高成交价：￥%s\
+                \r\n最低成交价：￥%s\
+                \r\n最新买入价：￥%s\
+                \r\n最新卖出价：￥%s" %\
+            (btcc.last_all, float(btcc.volume), btcc.high,
+                btcc.low, btcc.last_buy, btcc.last_sell)
+        return self.response_txt(content)
 
     def cn42btc(self):
         return self.response_txt(u'暂不不支持的命令，输入 h 或 help 查看帮助。', 1)
