@@ -38,15 +38,22 @@ class ResponsePost():
 
     def btc(self):
         mt = Mtgox()
+        mt.get_ticker()
         if mt.error:
             return self.response_txt(mt.error)
+
         btce = BTCE()
+        btce.get_ticker()
         if btce.error:
             return self.response_txt(mt.error)
+
         btcc = BTCChina()
+        btcc.get_ticker()
         if btcc.error:
             return self.response_txt(mt.error)
+
         fxbtc = Fxbtc()
+        fxbtc.get_ticker()
         if fxbtc.error:
             return self.response_txt(mt.error)
 
@@ -72,9 +79,12 @@ class ResponsePost():
 
     def ltc(self):
         btce_ltcusd = BTCE(coin='ltc_usd')
+        btce_ltcusd.get_ticker()
         if btce_ltcusd.error:
             return self.response_txt(btce_ltcusd.error.error)
+
         btce_ltcbtc = BTCE(coin='ltc_btc')
+        btce_ltcbtc.get_ticker()
         if btce_ltcbtc.error:
             return self.response_txt(btce_ltcbtc.error.error)
         content = u"利特币实时行情汇总\
@@ -88,6 +98,7 @@ class ResponsePost():
 
     def mtgox(self):
         mt = Mtgox()
+        mt.get_ticker()
         if mt.error:
             return self.response_txt(mt.error)
 
@@ -106,6 +117,7 @@ class ResponsePost():
 
     def btce(self):
         btce = BTCE()
+        btce.get_ticker()
         if btce.error:
             return self.response_txt(btce.error)
 
@@ -126,6 +138,7 @@ class ResponsePost():
 
     def btcchina(self):
         btcc = BTCChina()
+        btcc.get_ticker()
         if btcc.error:
             return self.response_txt(btcc.error)
 
@@ -143,6 +156,7 @@ class ResponsePost():
 
     def fxbtc(self):
         fxbtc = Fxbtc()
+        fxbtc.get_ticker()
         if fxbtc.error:
             return self.response_txt(fxbtc.error)
 

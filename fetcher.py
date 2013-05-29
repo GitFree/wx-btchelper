@@ -74,14 +74,19 @@ class Mtgox(Fetcher):
 
     def __init__(self, name='mtgox'):
         self.error = None
+        self.ticker = None
         super(Mtgox, self).__init__(name)
+
+    def get_ticker(self):
+        """must been called before following properties"""
         self.ticker = super(Mtgox, self).get_ticker(self.TICKER_URL)
         if self.ticker is None:
-            self.error = u'访问%s时发生网络故障' % name
+            self.error = u'访问%s时发生网络故障' % self.name
             # raise a web or website error exception
         elif self.ticker['result'] != 'success':
-            self.error = u'%s返回了错误的响应' % name
+            self.error = u'%s返回了错误的响应' % self.name
             # raise a wrong response content exception
+        super(Mtgox, self).get_ticker()
 
     @property
     def last_all(self):
@@ -133,14 +138,18 @@ class BTCE(Fetcher):
 
     def __init__(self, name='btc-e', coin='btc_usd'):
         self.error = None
+        self.ticker = None
+        self.coin = coin
         super(BTCE, self).__init__(name)
-        self.ticker = super(BTCE, self).get_ticker(self.TICKER_URL % coin)
+
+    def get_ticker(self):
+        self.ticker = super(BTCE, self).get_ticker(self.TICKER_URL % self.coin)
 
         if self.ticker is None:
-            self.error = u'访问%s时发生网络故障' % name
+            self.error = u'访问%s时发生网络故障' % self.name
             # raise a web or website error exception
         elif 'ticker' not in self.ticker:
-            self.error = u'%s返回非预期的响应' % name
+            self.error = u'%s返回非预期的响应' % self.name
             # raise a wrong response content exception
 
     @property
@@ -186,14 +195,17 @@ class BTCChina(Fetcher):
 
     def __init__(self, name='btcchina'):
         self.error = None
+        self.ticker = None
         super(BTCChina, self).__init__(name)
+
+    def get_ticker(self):
         self.ticker = super(BTCChina, self).get_ticker(self.TICKER_URL)
 
         if self.ticker is None:
-            self.error = u'访问%s时发生网络故障' % name
+            self.error = u'访问%s时发生网络故障' % self.name
             # raise a web or website error exception
         elif 'ticker' not in self.ticker:
-            self.error = u'%s返回非预期的响应' % name
+            self.error = u'%s返回非预期的响应' % self.name
             # raise a wrong response content exception
 
     @property
@@ -239,14 +251,18 @@ class Fxbtc(Fetcher):
 
     def __init__(self, name='fxbtc', coin='btc_cny'):
         self.error = None
+        self.ticker = None
+        self.coin = coin
         super(Fxbtc, self).__init__(name)
-        self.ticker = super(Fxbtc, self).get_ticker(self.TICKER_URL % coin)
+
+    def get_ticker(self):
+        self.ticker = super(Fxbtc, self).get_ticker(self.TICKER_URL % self.coin)
 
         if self.ticker is None:
-            self.error = u'访问%s时发生网络故障' % name
+            self.error = u'访问%s时发生网络故障' % self.name
             # raise a web or website error exception
         elif 'ticker' not in self.ticker:
-            self.error = u'%s返回非预期的响应' % name
+            self.error = u'%s返回非预期的响应' % self.name
             # raise a wrong response content exception
 
     @property
