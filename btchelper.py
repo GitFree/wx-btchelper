@@ -4,7 +4,7 @@ import hashlib
 import time
 import xml.etree.ElementTree as ET
 import settings
-from fetcher import Mtgox, BTCE, BTCChina, Fxbtc
+from fetcher import Mtgox, BTCE, BTCChina, Fxbtc, FetcherThread
 
 
 TOKEN = '55ac87b3ffb018bd583248873385f775'
@@ -38,24 +38,25 @@ class ResponsePost():
 
     def btc(self):
         mt = Mtgox()
-        mt.get_ticker()
-        if mt.error:
-            return self.response_txt(mt.error)
-
         btce = BTCE()
-        btce.get_ticker()
-        if btce.error:
-            return self.response_txt(mt.error)
-
         btcc = BTCChina()
-        btcc.get_ticker()
-        if btcc.error:
-            return self.response_txt(mt.error)
-
         fxbtc = Fxbtc()
-        fxbtc.get_ticker()
-        if fxbtc.error:
-            return self.response_txt(mt.error)
+        list_instance = [mt, btce, btcc, fxbtc]
+
+        list_thread = []
+        for instance in list_instance:
+            t = FetcherThread(instance)
+            list_thread.append(t)
+            t.daemon = True
+            t.start()
+
+        # wait for all thread finish
+        for t in list_thread:
+            t.join()
+
+        for instance in list_instance:
+            if instance.error:
+                return self.response_txt(instance.error)
 
         content = u"比特币实时行情汇总\
                 \r----------------\
@@ -79,14 +80,24 @@ class ResponsePost():
 
     def ltc(self):
         btce_ltcusd = BTCE(coin='ltc_usd')
-        btce_ltcusd.get_ticker()
-        if btce_ltcusd.error:
-            return self.response_txt(btce_ltcusd.error.error)
-
         btce_ltcbtc = BTCE(coin='ltc_btc')
-        btce_ltcbtc.get_ticker()
-        if btce_ltcbtc.error:
-            return self.response_txt(btce_ltcbtc.error.error)
+        list_instance = [btce_ltcusd, btce_ltcbtc]
+
+        list_thread = []
+        for instance in list_instance:
+            t = FetcherThread(instance)
+            list_thread.append(t)
+            t.daemon = True
+            t.start()
+
+        # wait for all thread finish
+        for t in list_thread:
+            t.join()
+
+        for instance in list_instance:
+            if instance.error:
+                return self.response_txt(instance.error)
+
         content = u"利特币实时行情汇总\
                 \r-----------------\
                 \r\nBTC-E实时价格1：$%.2f\

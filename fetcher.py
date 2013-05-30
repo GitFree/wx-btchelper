@@ -3,10 +3,20 @@ import urllib2
 import json
 import time
 import logging
+import threading
+
+
+class FetcherThread(threading.Thread):
+    """mutiple thread fetcher class"""
+    def __init__(self, instance):
+        super(FetcherThread, self).__init__(name=''.join(['thread_', instance.name]))
+        self.instance = instance
+
+    def  run(self):
+        self.instance.get_ticker()
 
 
 class Fetcher(object):
-
     def __init__(self, name):
         self.name = name  # fetcher name
         self.fh, self.sh = self.logger_init()
