@@ -43,7 +43,8 @@ class Fetcher(object):
 
     def get_request_result(self, url):
         try:
-            result = urllib2.urlopen(url)
+            # weixin waits 5s for each request, so here set timeout=4
+            result = urllib2.urlopen(url, timeout=4)
             if result.getcode() == 200:
                 return result.read()
             else:
@@ -86,7 +87,6 @@ class Mtgox(Fetcher):
         elif self.ticker['result'] != 'success':
             self.error = u'%s返回了错误的响应' % self.name
             # raise a wrong response content exception
-        super(Mtgox, self).get_ticker()
 
     @property
     def last_all(self):
