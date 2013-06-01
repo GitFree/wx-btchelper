@@ -81,7 +81,9 @@ class ResponsePost():
     def ltc(self):
         btce_ltcusd = BTCE(coin='ltc_usd')
         btce_ltcbtc = BTCE(coin='ltc_btc')
-        list_instance = [btce_ltcusd, btce_ltcbtc]
+        fx_ltccny = Fxbtc(coin='ltc_cny')
+        fx_ltcbtc = Fxbtc(coin='ltc_btc')
+        list_instance = [btce_ltcusd, btce_ltcbtc, fx_ltccny, fx_ltcbtc]
 
         list_thread = []
         for instance in list_instance:
@@ -102,9 +104,17 @@ class ResponsePost():
                 \r-----------------\
                 \r\nBTC-E实时价格1：$%.2f\
                 \r\nBTC-E实时价格2：%.4f BTC\
-                \r\nBTC-E日交量：%.2f LTC" %\
-            (btce_ltcusd.last_all, btce_ltcbtc.last_all,
-             btce_ltcbtc.volume + btce_ltcbtc.volume)
+                \r\nBTC-E日交量：%.2f LTC\
+                \r\n\
+                \r\nFXBTC实时价格1：￥%.2f\
+                \r\nFXBTC实时价格2：%.4f BTC\
+                \r\nFXBTC日交量：%.2f LTC" %\
+            (btce_ltcusd.last_all,
+             btce_ltcbtc.last_all,
+             btce_ltcbtc.volume + btce_ltcbtc.volume,
+             fx_ltccny.last_all,
+             fx_ltcbtc.last_all,
+             fx_ltccny.volume + fx_ltcbtc.volume)
         return self.response_txt(content)
 
     def mtgox(self):
