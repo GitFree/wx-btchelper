@@ -58,19 +58,19 @@ class ResponsePost():
             if instance.error:
                 return self.response_txt(instance.error)
 
-        content = u"比特币实时行情汇总\
-                \r----------------\
-                \r\nMtGox实时价格：%s\
-                \r\nMtGox日交量：%s\
-                \r\n\
-                \r\nBTC-E实时价格：$%.2f\
-                \r\nBTC-E日交量：%.4f BTC\
-                \r\n\
-                \r\nBTCChina实时价格：￥%s\
-                \r\nBTCChina日交量：%.4f BTC\
-                \r\n\
-                \r\nFXBTC实时价格：￥%.2f\
-                \r\nFXBTC日交量：%.4f BTC" %\
+        content = u"""比特币实时行情汇总\
+----------------
+MtGox实时价格：%s
+MtGox日交量：%s
+
+BTC-E实时价格：$%.2f
+BTC-E日交量：%.4f BTC
+
+BTCChina实时价格：￥%s
+BTCChina日交量：%.4f BTC
+
+FXBTC实时价格：￥%.2f
+FXBTC日交量：%.4f BTC""" %\
             (mt.last_all, mt.volume,
              btce.last_all, btce.volume,
              btcc.last_all, btcc.volume,
@@ -101,13 +101,14 @@ class ResponsePost():
                 return self.response_txt(instance.error)
 
         content = u"""利特币实时行情汇总
-                -----------------
-                BTC-E价格1：$%.2f
-                BTC-E价格2：%.4f BTC
-                BTC-E日交量：%.2f LTC
-                FXBTC价格1：￥%.2f
-                FXBTC价格2：%.4f BTC
-                FXBTC日交量：%.2f LTC""" %\
+-----------------
+BTC-E价格1：$%.2f
+BTC-E价格2：%.4f BTC
+BTC-E日交量：%.2f LTC
+
+FXBTC价格1：￥%.2f
+FXBTC价格2：%.4f BTC
+FXBTC日交量：%.2f LTC""" %\
             (btce_ltcusd.last_all,
              btce_ltcbtc.last_all,
              btce_ltcbtc.volume + btce_ltcbtc.volume,
@@ -122,15 +123,15 @@ class ResponsePost():
         if mt.error:
             return self.response_txt(mt.error)
 
-        content = u"MtGox比特币实时行情\
-                \r---------------\
-                \r\n最新成交价：%s\
-                \r\n日交量：%s\
-                \r\n最高成交价：%s\
-                \r\n最低成交价：%s\
-                \r\n最新买入价：%s\
-                \r\n最新卖出价：%s\
-                \r\n加权平均价：%s" %\
+        content = u"""MtGox比特币实时行情
+---------------
+最新成交价：%s
+日交量：%s
+最高成交价：%s
+最低成交价：%s
+最新买入价：%s
+最新卖出价：%s
+加权平均价：%s""" %\
             (mt.last_all, mt.volume, mt.high, mt.low,
              mt.last_buy, mt.last_sell, mt.vwap)
         return self.response_txt(content)
@@ -144,14 +145,14 @@ class ResponsePost():
         print "***btce****"
         print btce.error
         print "***btce***"
-        content = u"BTC-E比特币实时行情\
-                \r---------------\
-                \r\n最新成交价：$%.2f\
-                \r\n日交量：%.4f BTC\
-                \r\n最高成交价：$%.2f\
-                \r\n最低成交价：$%.2f\
-                \r\n最新买入价：$%.2f\
-                \r\n最新卖出价：$%.2f" %\
+        content = u"""BTC-E比特币实时行情
+---------------
+最新成交价：$%.2f
+日交量：%.4f BTC
+最高成交价：$%.2f
+最低成交价：$%.2f
+最新买入价：$%.2f
+最新卖出价：$%.2f""" %\
             (btce.last_all, btce.volume, btce.high,
                 btce.low, btce.last_buy, btce.last_sell)
         return self.response_txt(content)
@@ -162,14 +163,14 @@ class ResponsePost():
         if btcc.error:
             return self.response_txt(btcc.error)
 
-        content = u"BTCChina比特币实时行情\
-                \r---------------\
-                \r\n最新成交价：￥%.2f\
-                \r\n日交量：%.4f BTC\
-                \r\n最高成交价：￥%.2f\
-                \r\n最低成交价：￥%.2f\
-                \r\n最新买入价：￥%.2f\
-                \r\n最新卖出价：￥%.2f" %\
+        content = u"""BTCChina比特币实时行情
+---------------
+最新成交价：￥%.2f
+日交量：%.4f BTC
+最高成交价：￥%.2f
+最低成交价：￥%.2f
+最新买入价：￥%.2f
+最新卖出价：￥%.2f""" %\
             (btcc.last_all, btcc.volume, btcc.high,
                 btcc.low, btcc.last_buy, btcc.last_sell)
         return self.response_txt(content)
@@ -180,14 +181,14 @@ class ResponsePost():
         if fxbtc.error:
             return self.response_txt(fxbtc.error)
 
-        content = u"FXBTC比特币实时行情\
-                \r---------------\
-                \r\n最新成交价：￥%.2f\
-                \r\n日交量：%.4f BTC\
-                \r\n最高成交价：￥%.2f\
-                \r\n最低成交价：￥%.2f\
-                \r\n最新买入价：￥%.2f\
-                \r\n最新卖出价：￥%.2f" %\
+        content = u"""FXBTC比特币实时行情
+---------------
+最新成交价：￥%.2f
+日交量：%.4f BTC
+最高成交价：￥%.2f
+最低成交价：￥%.2f
+最新买入价：￥%.2f
+最新卖出价：￥%.2f""" %\
             (fxbtc.last_all, fxbtc.volume, fxbtc.high,
                 fxbtc.low, fxbtc.last_buy, fxbtc.last_sell)
         return self.response_txt(content)
