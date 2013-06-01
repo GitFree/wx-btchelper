@@ -58,18 +58,18 @@ class ResponsePost():
             if instance.error:
                 return self.response_txt(instance.error)
 
-        content = u"""比特币实时行情汇总\
+        content = u"""比特币实时行情汇总
 ----------------
-MtGox实时价格：%s
+MtGox价格：%s
 MtGox日交量：%s
 
-BTC-E实时价格：$%.2f
+BTC-E价格：$%.2f
 BTC-E日交量：%.4f BTC
 
-BTCChina实时价格：￥%s
+BTCChina价格：￥%s
 BTCChina日交量：%.4f BTC
 
-FXBTC实时价格：￥%.2f
+FXBTC价格：￥%.2f
 FXBTC日交量：%.4f BTC""" %\
             (mt.last_all, mt.volume,
              btce.last_all, btce.volume,
