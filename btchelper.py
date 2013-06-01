@@ -102,12 +102,12 @@ class ResponsePost():
 
         content = u"利特币实时行情汇总\
                 \r-----------------\
-                \r\nBTC-E实时价格1：$%.2f\
-                \r\nBTC-E实时价格2：%.4f BTC\
+                \r\nBTC-E价格1：$%.2f\
+                \r\nBTC-E价格2：%.4f BTC\
                 \r\nBTC-E日交量：%.2f LTC\
                 \r\n\
-                \r\nFXBTC实时价格1：￥%.2f\
-                \r\nFXBTC实时价格2：%.4f BTC\
+                \r\nFXBTC价格1：￥%.2f\
+                \r\nFXBTC价格2：%.4f BTC\
                 \r\nFXBTC日交量：%.2f LTC" %\
             (btce_ltcusd.last_all,
              btce_ltcbtc.last_all,
