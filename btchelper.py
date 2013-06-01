@@ -100,15 +100,14 @@ class ResponsePost():
             if instance.error:
                 return self.response_txt(instance.error)
 
-        content = u"利特币实时行情汇总\
-                \n-----------------\
-                \nBTC-E价格1：$%.2f\
-                \nBTC-E价格2：%.4f BTC\
-                \nBTC-E日交量：%.2f LTC\
-                \n\
-                \nFXBTC价格1：￥%.2f\
-                \nFXBTC价格2：%.4f BTC\
-                \nFXBTC日交量：%.2f LTC" %\
+        content = u"""利特币实时行情汇总
+                -----------------
+                BTC-E价格1：$%.2f
+                BTC-E价格2：%.4f BTC
+                BTC-E日交量：%.2f LTC
+                FXBTC价格1：￥%.2f
+                FXBTC价格2：%.4f BTC
+                FXBTC日交量：%.2f LTC""" %\
             (btce_ltcusd.last_all,
              btce_ltcbtc.last_all,
              btce_ltcbtc.volume + btce_ltcbtc.volume,
