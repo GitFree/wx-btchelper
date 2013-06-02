@@ -55,7 +55,8 @@ KEYWORDS_DIC = {
     'ltc': ('ltc', 'l', u'利特币',),
     'mtgox': ('mtgox', 'mt', 'gox'),
     'btce': ('btce', 'btc-e',),
-    'btcchina': ('btcc', 'btcchina',),
+    'btcchina': ('btcc', 'btcchina', u'比特币中国'),
+    'fxbtc': ('fx', 'fxbtc',),
     '42btc': ('42btc',),
     'todo': ('todo',),
 }
@@ -68,20 +69,20 @@ RESPONSE_UNSUPPORTED_TYPE = u"不支持的消息类型，目前仅支持文本�
 \r\n输入h或help查看帮助。"
 
 # compatible display style with both android and ios
-RESPONSE_HELP = u"【btc】比特币实时价格汇总\
-\r\n【ltc】利特币实时价格汇总\
-\r\n【mt】MtGox实时交易信息\
-\r\n【btce】BTC-E实时交易信息\
-\r\n【todo】正在开发的命令\
-\r\
-\r\n任何建议意见请直接留言"
+RESPONSE_HELP = u"""【btc】比特币实时行情汇总
+【ltc】利特币实时行情汇总
+【mt】MtGox比特币实时行情
+【btce】BTC-E比特币实时行情
+【btcc】BTCChina比特币实时行情
+【fx】FXBTC比特币实时行情
+【todo】正在开发的命令
 
-RESPONSE_TODO = u"正在开发的命令：\
-\r\n【btcc】BTCChina实时交易\
-\r\n【fxbtc】FXBTC实时交易信息\
-\r\n【】以美元/人民币价格显示\
-\r\n【】最近n分钟/小时/天价格\
-\r\n【】24小时价格走势图\
-\r\n【】N天价格走势图\
-\r\
-\r\n任何建议意见请直接留言"
+任何建议意见请直接留言"""
+
+RESPONSE_TODO = u"""正在开发的命令：
+【】以美元/人民币价格显示
+【】最近n分钟/小时/天价格
+【】24小时价格走势图
+【】N天价格走势图
+
+任何建议意见请直接留言"""

@@ -4,7 +4,7 @@ import hashlib
 import time
 import xml.etree.ElementTree as ET
 import settings
-from fetcher import Mtgox, BTCE
+from fetcher import Mtgox, BTCE, BTCChina, Fxbtc, FetcherThread
 
 
 TOKEN = '55ac87b3ffb018bd583248873385f775'
@@ -39,59 +39,159 @@ class ResponsePost():
     def btc(self):
         mt = Mtgox()
         btce = BTCE()
-        content = u"比特币实时价格汇总\
-                \r----------------\
-                \r\nMtGox实时价格：%s\
-                \r\nMtGox日交量：%s\
-                \r\
-                \r\nBTC-E实时价格：$%.2f\
-                \r\nBTC-E日交量：%.2f BTC" %\
-            (mt.last_all, mt.volume, btce.last_all, btce.volume)
+        btcc = BTCChina()
+        fxbtc = Fxbtc()
+        list_instance = [mt, btce, btcc, fxbtc]
+
+        list_thread = []
+        for instance in list_instance:
+            t = FetcherThread(instance)
+            list_thread.append(t)
+            t.daemon = True
+            t.start()
+
+        # wait for all thread finish
+        for t in list_thread:
+            t.join()
+
+        for instance in list_instance:
+            if instance.error:
+                return self.response_txt(instance.error)
+
+        content = u"""比特币实时行情汇总
+----------------
+MtGox价格：%s
+MtGox日交量：%s
+
+BTC-E价格：$%.2f
+BTC-E日交量：%.4f BTC
+
+BTCChina价格：￥%s
+BTCChina日交量：%.4f BTC
+
+FXBTC价格：￥%.2f
+FXBTC日交量：%.4f BTC""" %\
+            (mt.last_all, mt.volume,
+             btce.last_all, btce.volume,
+             btcc.last_all, btcc.volume,
+             fxbtc.last_all, fxbtc.volume)
+
         return self.response_txt(content)
 
     def ltc(self):
         btce_ltcusd = BTCE(coin='ltc_usd')
         btce_ltcbtc = BTCE(coin='ltc_btc')
-        content = u"利特币实时价格汇总\
-                \r-----------------\
-                \r\nBTC-E实时价格1：$%.2f\
-                \r\nBTC-E实时价格2：%.4f BTC\
-                \r\nBTC-E日交量：$%.2f LTC" %\
-            (btce_ltcusd.last_all, btce_ltcbtc.last_all,
-             btce_ltcbtc.volume + btce_ltcbtc.volume)
+        fx_ltccny = Fxbtc(coin='ltc_cny')
+        fx_ltcbtc = Fxbtc(coin='ltc_btc')
+        list_instance = [btce_ltcusd, btce_ltcbtc, fx_ltccny, fx_ltcbtc]
+
+        list_thread = []
+        for instance in list_instance:
+            t = FetcherThread(instance)
+            list_thread.append(t)
+            t.daemon = True
+            t.start()
+
+        # wait for all thread finish
+        for t in list_thread:
+            t.join()
+
+        for instance in list_instance:
+            if instance.error:
+                return self.response_txt(instance.error)
+
+        content = u"""利特币实时行情汇总
+-----------------
+BTC-E价格1：$%.2f
+BTC-E价格2：%.4f BTC
+BTC-E日交量：%.2f LTC
+
+FXBTC价格1：￥%.2f
+FXBTC价格2：%.4f BTC
+FXBTC日交量：%.2f LTC""" %\
+            (btce_ltcusd.last_all,
+             btce_ltcbtc.last_all,
+             btce_ltcbtc.volume + btce_ltcbtc.volume,
+             fx_ltccny.last_all,
+             fx_ltcbtc.last_all,
+             fx_ltccny.volume + fx_ltcbtc.volume)
         return self.response_txt(content)
 
     def mtgox(self):
         mt = Mtgox()
-        content = u"MtGox实时信息\
-                \r---------------\
-                \r\n最新成交价：%s\
-                \r\n日交量：%s\
-                \r\n最高成交价：%s\
-                \r\n最低成交价：%s\
-                \r\n最新买入价：%s\
-                \r\n最新卖出价：%s\
-                \r\n加权平均价：%s" %\
+        mt.get_ticker()
+        if mt.error:
+            return self.response_txt(mt.error)
+
+        content = u"""MtGox比特币实时行情
+---------------
+最新成交价：%s
+日交量：%s
+最高成交价：%s
+最低成交价：%s
+最新买入价：%s
+最新卖出价：%s
+加权平均价：%s""" %\
             (mt.last_all, mt.volume, mt.high, mt.low,
              mt.last_buy, mt.last_sell, mt.vwap)
         return self.response_txt(content)
 
     def btce(self):
         btce = BTCE()
-        content = u"BTC-E实时信息\
-                \r---------------\
-                \r\n最新成交价：$%.2f\
-                \r\n日交量：%.2f BTC\
-                \r\n最高成交价：$%.2f\
-                \r\n最低成交价：$%.2f\
-                \r\n最新买入价：$%.2f\
-                \r\n最新卖出价：$%.2f" %\
+        btce.get_ticker()
+        if btce.error:
+            return self.response_txt(btce.error)
+
+        print "***btce****"
+        print btce.error
+        print "***btce***"
+        content = u"""BTC-E比特币实时行情
+---------------
+最新成交价：$%.2f
+日交量：%.4f BTC
+最高成交价：$%.2f
+最低成交价：$%.2f
+最新买入价：$%.2f
+最新卖出价：$%.2f""" %\
             (btce.last_all, btce.volume, btce.high,
                 btce.low, btce.last_buy, btce.last_sell)
         return self.response_txt(content)
 
     def btcchina(self):
-        return self.response_txt(u'暂不支持的命令，输入 h 或 help 查看帮助。', 1)
+        btcc = BTCChina()
+        btcc.get_ticker()
+        if btcc.error:
+            return self.response_txt(btcc.error)
+
+        content = u"""BTCChina比特币实时行情
+---------------
+最新成交价：￥%.2f
+日交量：%.4f BTC
+最高成交价：￥%.2f
+最低成交价：￥%.2f
+最新买入价：￥%.2f
+最新卖出价：￥%.2f""" %\
+            (btcc.last_all, btcc.volume, btcc.high,
+                btcc.low, btcc.last_buy, btcc.last_sell)
+        return self.response_txt(content)
+
+    def fxbtc(self):
+        fxbtc = Fxbtc()
+        fxbtc.get_ticker()
+        if fxbtc.error:
+            return self.response_txt(fxbtc.error)
+
+        content = u"""FXBTC比特币实时行情
+---------------
+最新成交价：￥%.2f
+日交量：%.4f BTC
+最高成交价：￥%.2f
+最低成交价：￥%.2f
+最新买入价：￥%.2f
+最新卖出价：￥%.2f""" %\
+            (fxbtc.last_all, fxbtc.volume, fxbtc.high,
+                fxbtc.low, fxbtc.last_buy, fxbtc.last_sell)
+        return self.response_txt(content)
 
     def cn42btc(self):
         return self.response_txt(u'暂不不支持的命令，输入 h 或 help 查看帮助。', 1)
@@ -136,6 +236,8 @@ def handle_post(msg_dic):
             return resp.btce()
         if content in settings.KEYWORDS_DIC['btcchina']:
             return resp.btcchina()
+        if content in settings.KEYWORDS_DIC['fxbtc']:
+            return resp.fxbtc()
         if content in settings.KEYWORDS_DIC['42btc']:
             return resp.cn42btc()
         if content in settings.KEYWORDS_DIC['todo']:

@@ -1,7 +1,7 @@
 <uwsgi>
     <socket>127.0.0.1:8002</socket>
     <master/>
-    <processes>1</processes>
+    <processes>2</processes>
     <plugins>python</plugins>
     <chdir>/srv/www/nginx/btchelper</chdir>
     <pythonpath>..</pythonpath>

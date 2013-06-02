@@ -1,13 +1,22 @@
 # encoding=utf-8
 import urllib2
-import urllib
 import json
 import time
 import logging
+import threading
+
+
+class FetcherThread(threading.Thread):
+    """mutiple thread fetcher class"""
+    def __init__(self, instance):
+        super(FetcherThread, self).__init__(name=''.join(['thread_', instance.name]))
+        self.instance = instance
+
+    def  run(self):
+        self.instance.get_ticker()
 
 
 class Fetcher(object):
-
     def __init__(self, name):
         self.name = name  # fetcher name
         self.fh, self.sh = self.logger_init()
@@ -44,7 +53,8 @@ class Fetcher(object):
 
     def get_request_result(self, url):
         try:
-            result = urllib2.urlopen(url)
+            # weixin waits 5s for each request, so here set timeout=4
+            result = urllib2.urlopen(url, timeout=4)
             if result.getcode() == 200:
                 return result.read()
             else:
@@ -53,12 +63,12 @@ class Fetcher(object):
             self.logger.error("HTTPError: %d--%s" % (e.code, e.reason))
             return None
         except urllib2.URLError, e:
-            self.logger.error("URLError: %s" + e.reason)
+            self.logger.error("URLError: %s" % e.reason)
             return None
 
     def get_ticker(self, ticker_url):
         ticker_json = self.get_request_result(ticker_url)
-        if ticker_json:  # ticker_json is *not* (None or empty string)
+        if ticker_json:  # ticker_json is *not* None or empty string
             return json.loads(ticker_json)
         else:
             return None
@@ -75,23 +85,18 @@ class Mtgox(Fetcher):
 
     def __init__(self, name='mtgox'):
         self.error = None
+        self.ticker = None
         super(Mtgox, self).__init__(name)
+
+    def get_ticker(self):
+        """must been called before following properties"""
         self.ticker = super(Mtgox, self).get_ticker(self.TICKER_URL)
         if self.ticker is None:
-            self.error = u'访问%s时发生网络故障' % name
+            self.error = u'访问%s时发生网络故障' % self.name
             # raise a web or website error exception
         elif self.ticker['result'] != 'success':
-            self.error = u'%s返回了错误的响应' % name
+            self.error = u'%s返回了错误的响应' % self.name
             # raise a wrong response content exception
-
-    def get_ticker_with_auth(self):
-        param = {'nonce': super.nonce}
-        post_data = urllib.urlencode(param)
-        request = self.get_request('/BTCUSD/money/ticker', post_data)
-        ticker_file = urllib2.urlopen(request, post_data)
-        self.ticker = json.loads(ticker_file.read())
-        if self.ticker['result'] != 'success':
-            pass  # raise a customer exception
 
     @property
     def last_all(self):
@@ -143,49 +148,166 @@ class BTCE(Fetcher):
 
     def __init__(self, name='btc-e', coin='btc_usd'):
         self.error = None
+        self.ticker = None
+        self.coin = coin
         super(BTCE, self).__init__(name)
-        self.ticker = super(BTCE, self).get_ticker(self.TICKER_URL % coin)
+
+    def get_ticker(self):
+        self.ticker = super(BTCE, self).get_ticker(self.TICKER_URL % self.coin)
 
         if self.ticker is None:
-            self.error = u'访问%s时发生网络故障' % name
+            self.error = u'访问%s时发生网络故障' % self.name
             # raise a web or website error exception
         elif 'ticker' not in self.ticker:
-            self.error = u'%s返回非预期的响应' % name
+            self.error = u'%s返回非预期的响应' % self.name
             # raise a wrong response content exception
 
     @property
     def last_all(self):
         if self.error:
             return self.error
-        return self.ticker['ticker']['last']
+        return float(self.ticker['ticker']['last'])
 
     @property
     def high(self):
         if self.error:
             return self.error
-        return self.ticker['ticker']['high']
+        return float(self.ticker['ticker']['high'])
 
     @property
     def low(self):
         if self.error:
             return self.error
-        return self.ticker['ticker']['low']
+        return float(self.ticker['ticker']['low'])
 
     @property
     def volume(self):
         """the volume traded today"""
         if self.error:
             return self.error
-        return self.ticker['ticker']['vol_cur']
+        return float(self.ticker['ticker']['vol_cur'])
 
     @property
     def last_buy(self):
         if self.error:
             return self.error
-        return self.ticker['ticker']['buy']
+        return float(self.ticker['ticker']['buy'])
 
     @property
     def last_sell(self):
         if self.error:
             return self.error
-        return self.ticker['ticker']['sell']
+        return float(self.ticker['ticker']['sell'])
+
+
+class BTCChina(Fetcher):
+    TICKER_URL = 'https://data.btcchina.com/data/ticker'
+
+    def __init__(self, name='btcchina'):
+        self.error = None
+        self.ticker = None
+        super(BTCChina, self).__init__(name)
+
+    def get_ticker(self):
+        self.ticker = super(BTCChina, self).get_ticker(self.TICKER_URL)
+
+        if self.ticker is None:
+            self.error = u'访问%s时发生网络故障' % self.name
+            # raise a web or website error exception
+        elif 'ticker' not in self.ticker:
+            self.error = u'%s返回非预期的响应' % self.name
+            # raise a wrong response content exception
+
+    @property
+    def last_all(self):
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['last'])
+
+    @property
+    def high(self):
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['high'])
+
+    @property
+    def low(self):
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['low'])
+
+    @property
+    def volume(self):
+        """the volume traded today"""
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['vol'])
+
+    @property
+    def last_buy(self):
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['buy'])
+
+    @property
+    def last_sell(self):
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['sell'])
+
+
+class Fxbtc(Fetcher):
+    TICKER_URL = 'https://www.fxbtc.com/jport?op=query&type=ticker&symbol=%s'
+
+    def __init__(self, name='fxbtc', coin='btc_cny'):
+        self.error = None
+        self.ticker = None
+        self.coin = coin
+        super(Fxbtc, self).__init__(name)
+
+    def get_ticker(self):
+        self.ticker = super(Fxbtc, self).get_ticker(self.TICKER_URL % self.coin)
+
+        if self.ticker is None:
+            self.error = u'访问%s时发生网络故障' % self.name
+            # raise a web or website error exception
+        elif 'ticker' not in self.ticker:
+            self.error = u'%s返回非预期的响应' % self.name
+            # raise a wrong response content exception
+
+    @property
+    def last_all(self):
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['last_rate'])
+
+    @property
+    def high(self):
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['high'])
+
+    @property
+    def low(self):
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['low'])
+
+    @property
+    def volume(self):
+        """the volume traded today"""
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['vol'])
+
+    @property
+    def last_buy(self):
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['bid'])
+
+    @property
+    def last_sell(self):
+        if self.error:
+            return self.error
+        return float(self.ticker['ticker']['ask'])
