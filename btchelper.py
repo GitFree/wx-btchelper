@@ -4,10 +4,10 @@ import hashlib
 import time
 import xml.etree.ElementTree as ET
 import settings
-from fetcher import Mtgox, BTCE, BTCChina, Fxbtc, FetcherThread
+from fetcher import Mtgox, BTCE, BTCChina, Fxbtc, FetcherThread, get_usd_cny_currency
 
 
-TOKEN = '55ac87b3ffb018bd583248873385f775'
+WEIXIN_TOKEN = '55ac87b3ffb018bd583248873385f775'
 
 
 class ResponsePost():
@@ -37,11 +37,12 @@ class ResponsePost():
         return self.response_txt(settings.RESPONSE_HELP)
 
     def btc(self):
-        mt = Mtgox()
+        mt_usd = Mtgox(currency='USD')
+        #mt_cny = Mtgox(currency='CNY')
         btce = BTCE()
         btcc = BTCChina()
         fxbtc = Fxbtc()
-        list_instance = [mt, btce, btcc, fxbtc]
+        list_instance = [mt_usd, btce, btcc, fxbtc]
 
         list_thread = []
         for instance in list_instance:
@@ -56,14 +57,16 @@ class ResponsePost():
 
         for instance in list_instance:
             if instance.error:
-                return self.response_txt(instance.error)
+                instance = None
+
+        usd_cny_currency = get_usd_cny_currency()
 
         content = u"""比特币实时行情汇总
 ----------------
-MtGox价格：%s
+Mtgox价格：$%.2f，合￥%.2f
 MtGox日交量：%s
 
-BTC-E价格：$%.2f
+BTC-E价格：$%.2f，合￥%.2f
 BTC-E日交量：%.4f BTC
 
 BTCChina价格：￥%s
@@ -71,10 +74,16 @@ BTCChina日交量：%.4f BTC
 
 FXBTC价格：￥%.2f
 FXBTC日交量：%.4f BTC""" %\
-            (mt.last_all, mt.volume,
-             btce.last_all, btce.volume,
-             btcc.last_all, btcc.volume,
-             fxbtc.last_all, fxbtc.volume)
+            (0 if mt_usd is None else mt_usd.last_all,
+             mt_usd.last_all * usd_cny_currency,
+             0 if mt_usd is None else mt_usd.volume,
+             0 if btce is None else btce.last_all,
+             btce.last_all * usd_cny_currency,
+             0 if btce is None else btce.volume,
+             0 if btcc is None else btcc.last_all,
+             0 if btcc is None else btcc.volume,
+             0 if fxbtc is None else fxbtc.last_all,
+             0 if fxbtc is None else fxbtc.volume)
 
         return self.response_txt(content)
 
@@ -98,42 +107,59 @@ FXBTC日交量：%.4f BTC""" %\
 
         for instance in list_instance:
             if instance.error:
-                return self.response_txt(instance.error)
+                instance = None
+
+        usd_cny_currency = get_usd_cny_currency()
 
         content = u"""利特币实时行情汇总
 -----------------
-BTC-E价格1：$%.2f
+BTC-E价格1：$%.2f，合￥%.2f
 BTC-E价格2：%.4f BTC
 BTC-E日交量：%.2f LTC
 
 FXBTC价格1：￥%.2f
 FXBTC价格2：%.4f BTC
 FXBTC日交量：%.2f LTC""" %\
-            (btce_ltcusd.last_all,
-             btce_ltcbtc.last_all,
-             btce_ltcbtc.volume + btce_ltcbtc.volume,
-             fx_ltccny.last_all,
-             fx_ltcbtc.last_all,
-             fx_ltccny.volume + fx_ltcbtc.volume)
+            (0 if btce_ltcusd is None else btce_ltcusd.last_all,
+             btce_ltcusd.last_all * usd_cny_currency,
+             0 if btce_ltcbtc is None else btce_ltcbtc.last_all,
+             0 if (btce_ltcusd and btce_ltcbtc) is None else btce_ltcusd.volume + btce_ltcbtc.volume,
+             0 if fx_ltccny is None else fx_ltccny.last_all,
+             0 if fx_ltcbtc is None else btce_ltcbtc.last_all,
+             0 if (fx_ltccny and fx_ltcbtc) is None else fx_ltccny.volume + fx_ltcbtc.volume)
         return self.response_txt(content)
 
     def mtgox(self):
-        mt = Mtgox()
-        mt.get_ticker()
-        if mt.error:
-            return self.response_txt(mt.error)
+        mt_usd = Mtgox(currency='USD')
+        mt_usd.get_ticker()
+
+        if mt_usd.error:
+            return self.response_txt(mt_usd.error)
+
+        usd_cny_currency = get_usd_cny_currency()
 
         content = u"""MtGox比特币实时行情
 ---------------
-最新成交价：%s
+最新成交价：$%.2f，合￥%.2f
 日交量：%s
-最高成交价：%s
-最低成交价：%s
-最新买入价：%s
-最新卖出价：%s
-加权平均价：%s""" %\
-            (mt.last_all, mt.volume, mt.high, mt.low,
-             mt.last_buy, mt.last_sell, mt.vwap)
+最高成交价：$%.2f，合￥%.2f
+最低成交价：$%.2f，合￥%.2f
+最新买入价：$%.2f，合￥%.2f
+最新卖出价：$%.2f，合￥%.2f
+加权平均价：$%.2f，合￥%.2f""" %\
+            (mt_usd.last_all,
+             mt_usd.last_all * usd_cny_currency,
+             mt_usd.volume,
+             mt_usd.high,
+             mt_usd.high * usd_cny_currency,
+             mt_usd.low,
+             mt_usd.low * usd_cny_currency,
+             mt_usd.last_buy,
+             mt_usd.last_buy * usd_cny_currency,
+             mt_usd.last_sell,
+             mt_usd.last_sell * usd_cny_currency,
+             mt_usd.vwap,
+             mt_usd.vwap * usd_cny_currency)
         return self.response_txt(content)
 
     def btce(self):
@@ -142,19 +168,27 @@ FXBTC日交量：%.2f LTC""" %\
         if btce.error:
             return self.response_txt(btce.error)
 
-        print "***btce****"
-        print btce.error
-        print "***btce***"
+        usd_cny_currency = get_usd_cny_currency()
+
         content = u"""BTC-E比特币实时行情
 ---------------
-最新成交价：$%.2f
+最新成交价：$%.2f，合￥%.2f
 日交量：%.4f BTC
-最高成交价：$%.2f
-最低成交价：$%.2f
-最新买入价：$%.2f
-最新卖出价：$%.2f""" %\
-            (btce.last_all, btce.volume, btce.high,
-                btce.low, btce.last_buy, btce.last_sell)
+最高成交价：$%.2f，合￥%.2f
+最低成交价：$%.2f，合￥%.2f
+最新买入价：$%.2f，合￥%.2f
+最新卖出价：$%.2f，合￥%.2f""" %\
+            (btce.last_all,
+             btce.last_all * usd_cny_currency,
+             btce.volume,
+             btce.high,
+             btce.high * usd_cny_currency,
+             btce.low,
+             btce.low * usd_cny_currency,
+             btce.last_buy,
+             btce.last_buy * usd_cny_currency,
+             btce.last_sell,
+             btce.last_sell * usd_cny_currency)
         return self.response_txt(content)
 
     def btcchina(self):
@@ -254,13 +288,13 @@ def check_signature():
         2.sha1 the three args
         3.return echoStr to winxin
     """
-    global TOKEN
+    global WEIXIN_TOKEN
     signature = request.GET.get("signature", None)
     timestamp = request.GET.get("timestamp", None)
     nonce = request.GET.get("nonce", None)
     echoStr = request.GET.get("echostr", None)
 
-    token = TOKEN
+    token = WEIXIN_TOKEN
     tmpList = [token, timestamp, nonce]
     tmpList.sort()
     tmpstr = "%s%s%s" % tuple(tmpList)

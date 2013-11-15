@@ -1,9 +1,37 @@
 # encoding=utf-8
 import urllib2
 import json
-import time
 import logging
 import threading
+import datetime
+
+USD_CNY_CURRENCY = None
+CURRENCY_LAST_FETCH_DATE = None
+
+
+def get_usd_cny_currency():
+    CURRENCY_URL = "http://openexchangerates.org/api/latest.json?app_id=c6003cbd36254d80be3b41fb1a2012af"
+    global USD_CNY_CURRENCY
+    global CURRENCY_LAST_FETCH_DATE
+
+    if USD_CNY_CURRENCY and CURRENCY_LAST_FETCH_DATE == datetime.date.today():
+        return USD_CNY_CURRENCY
+    else:
+        fetcher = Fetcher('currency_fetcher')
+        json_result = fetcher.get_request_result(CURRENCY_URL)
+        result_dict = json.loads(json_result)
+        try:
+            USD_CNY_CURRENCY = result_dict['rates']['CNY']
+            CURRENCY_LAST_FETCH_DATE = datetime.date.today()
+            fetcher.logger.info("USD_CNY_CURRENCY: %s" % USD_CNY_CURRENCY)
+            fetcher.logger.info("CURRENCY_LAST_FETCH_DATE: %s" % CURRENCY_LAST_FETCH_DATE)
+            return USD_CNY_CURRENCY
+        except KeyError, e:
+            fetcher.logger.error("openexchangerates return unexpected data")
+            return 0
+        except Exception, e:
+            fetcher.logger.error("Error: %s" % e)
+            return 0
 
 
 class FetcherThread(threading.Thread):
@@ -12,7 +40,7 @@ class FetcherThread(threading.Thread):
         super(FetcherThread, self).__init__(name=''.join(['thread_', instance.name]))
         self.instance = instance
 
-    def  run(self):
+    def run(self):
         self.instance.get_ticker()
 
 
@@ -73,48 +101,53 @@ class Fetcher(object):
         else:
             return None
 
-    @property
-    def nonce(self):
-        if self.error:
-            return self.error
-        return str(int(time.time() * 1e6))
+    #@property
+    #def nonce(self):
+        #if self.error:
+            #return self.error
+        #return str(int(time.time() * 1e6))
 
 
 class Mtgox(Fetcher):
-    TICKER_URL = 'https://data.mtgox.com/api/2/BTCUSD/money/ticker'
+    TICKER_URL_USD = 'https://data.mtgox.com/api/2/BTCUSD/money/ticker'
+    TICKER_URL_CNY = 'https://data.mtgox.com/api/2/BTCCNY/money/ticker'
 
-    def __init__(self, name='mtgox'):
+    def __init__(self, name='mtgox', currency='USD'):
         self.error = None
         self.ticker = None
+        if currency == 'USD':
+            self.ticker_url = self.TICKER_URL_USD
+        elif currency == 'CNY':
+            self.ticker_url = self.TICKER_URL_CNY
         super(Mtgox, self).__init__(name)
 
     def get_ticker(self):
         """must been called before following properties"""
-        self.ticker = super(Mtgox, self).get_ticker(self.TICKER_URL)
+        self.ticker = super(Mtgox, self).get_ticker(self.ticker_url)
         if self.ticker is None:
             self.error = u'访问%s时发生网络故障' % self.name
             # raise a web or website error exception
         elif self.ticker['result'] != 'success':
-            self.error = u'%s返回了错误的响应' % self.name
+            self.error = u'%s已返回，但内容错误' % self.name
             # raise a wrong response content exception
 
     @property
     def last_all(self):
         if self.error:
             return self.error
-        return self.ticker['data']['last_all']['display_short']
+        return float(self.ticker['data']['last_all']['value'])
 
     @property
     def high(self):
         if self.error:
             return self.error
-        return self.ticker['data']['high']['display_short']
+        return float(self.ticker['data']['high']['value'])
 
     @property
     def low(self):
         if self.error:
             return self.error
-        return self.ticker['data']['low']['display_short']
+        return float(self.ticker['data']['low']['value'])
 
     @property
     def volume(self):
@@ -128,19 +161,19 @@ class Mtgox(Fetcher):
         """the volume-weighted average price"""
         if self.error:
             return self.error
-        return self.ticker['data']['vwap']['display_short']
+        return float(self.ticker['data']['vwap']['value'])
 
     @property
     def last_buy(self):
         if self.error:
             return self.error
-        return self.ticker['data']['buy']['display_short']
+        return float(self.ticker['data']['buy']['value'])
 
     @property
     def last_sell(self):
         if self.error:
             return self.error
-        return self.ticker['data']['sell']['display_short']
+        return float(self.ticker['data']['sell']['value'])
 
 
 class BTCE(Fetcher):
@@ -159,7 +192,7 @@ class BTCE(Fetcher):
             self.error = u'访问%s时发生网络故障' % self.name
             # raise a web or website error exception
         elif 'ticker' not in self.ticker:
-            self.error = u'%s返回非预期的响应' % self.name
+            self.error = u'%s已返回，但内容错误' % self.name
             # raise a wrong response content exception
 
     @property
@@ -215,7 +248,7 @@ class BTCChina(Fetcher):
             self.error = u'访问%s时发生网络故障' % self.name
             # raise a web or website error exception
         elif 'ticker' not in self.ticker:
-            self.error = u'%s返回非预期的响应' % self.name
+            self.error = u'%s已返回，但内容错误' % self.name
             # raise a wrong response content exception
 
     @property
@@ -272,7 +305,7 @@ class Fxbtc(Fetcher):
             self.error = u'访问%s时发生网络故障' % self.name
             # raise a web or website error exception
         elif 'ticker' not in self.ticker:
-            self.error = u'%s返回非预期的响应' % self.name
+            self.error = u'%s已返回，但内容错误' % self.name
             # raise a wrong response content exception
 
     @property
