@@ -4,7 +4,8 @@ import hashlib
 import time
 import xml.etree.ElementTree as ET
 import settings
-from fetcher import Mtgox, BTCE, BTCChina, Fxbtc, FetcherThread, get_usd_cny_currency
+from fetcher import Mtgox, BTCE, BTCChina, Fxbtc, CN42BTC
+from fetcher import FetcherThread, get_usd_cny_currency
 
 
 WEIXIN_TOKEN = '55ac87b3ffb018bd583248873385f775'
@@ -42,7 +43,8 @@ class ResponsePost():
         btce = BTCE()
         btcc = BTCChina()
         fxbtc = Fxbtc()
-        list_instance = [mt_usd, btce, btcc, fxbtc]
+        cn42btc = CN42BTC()
+        list_instance = [mt_usd, btce, btcc, fxbtc, cn42btc]
 
         list_thread = []
         for instance in list_instance:
@@ -69,11 +71,15 @@ MtGox日交量：%s
 BTC-E价格：$%.2f，合￥%.2f
 BTC-E日交量：%.4f BTC
 
-BTCChina价格：￥%s
+BTCChina价格：￥%.2f
 BTCChina日交量：%.4f BTC
 
 FXBTC价格：￥%.2f
-FXBTC日交量：%.4f BTC""" %\
+FXBTC日交量：%.4f BTC
+
+42BTC价格：￥%.2f
+42BTC日交量：%.4f BTC
+""" %\
             (0 if mt_usd is None else mt_usd.last_all,
              mt_usd.last_all * usd_cny_currency,
              0 if mt_usd is None else mt_usd.volume,
@@ -83,7 +89,9 @@ FXBTC日交量：%.4f BTC""" %\
              0 if btcc is None else btcc.last_all,
              0 if btcc is None else btcc.volume,
              0 if fxbtc is None else fxbtc.last_all,
-             0 if fxbtc is None else fxbtc.volume)
+             0 if fxbtc is None else fxbtc.volume,
+             0 if fxbtc is None else cn42btc.last_all,
+             0 if fxbtc is None else cn42btc.volume)
 
         return self.response_txt(content)
 
@@ -228,7 +236,23 @@ FXBTC日交量：%.2f LTC""" %\
         return self.response_txt(content)
 
     def cn42btc(self):
-        return self.response_txt(u'暂不不支持的命令，输入 h 或 help 查看帮助。', 1)
+        cn42btc = CN42BTC()
+        cn42btc.get_ticker()
+        if cn42btc.error:
+            return self.response_txt(cn42btc.error)
+
+        content = u"""42BTC比特币实时行情
+---------------
+最新成交价：￥%.2f
+日交量：%.4f BTC
+最高成交价：￥%.2f
+最低成交价：￥%.2f
+平均成交价：￥%.2f
+最新买入价：￥%.2f
+最新卖出价：￥%.2f""" %\
+            (cn42btc.last_all, cn42btc.volume, cn42btc.high,
+             cn42btc.low, cn42btc.average, cn42btc.last_buy, cn42btc.last_sell)
+        return self.response_txt(content)
 
     def todo(self):
         """TODO list"""

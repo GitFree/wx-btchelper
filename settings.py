@@ -57,7 +57,7 @@ KEYWORDS_DIC = {
     'btce': ('btce', 'btc-e',),
     'btcchina': ('btcc', 'btcchina', u'比特币中国'),
     'fxbtc': ('fx', 'fxbtc',),
-    '42btc': ('42btc',),
+    '42btc': ('42', '42btc'),
     'todo': ('todo',),
 }
 
@@ -75,6 +75,7 @@ RESPONSE_HELP = u"""【btc】比特币实时行情汇总
 【btce】BTC-E比特币实时行情
 【btcc】BTCChina比特币实时行情
 【fx】FXBTC比特币实时行情
+【42】42BTC比特币实时行情
 【todo】正在开发的命令
 
 任何建议意见请直接留言"""

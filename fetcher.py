@@ -126,54 +126,73 @@ class Mtgox(Fetcher):
         self.ticker = super(Mtgox, self).get_ticker(self.ticker_url)
         if self.ticker is None:
             self.error = u'访问%s时发生网络故障' % self.name
-            # raise a web or website error exception
         elif self.ticker['result'] != 'success':
-            self.error = u'%s已返回，但内容错误' % self.name
-            # raise a wrong response content exception
+            self.error = u'%s已返回数据，但内容错误' % self.name
 
     @property
     def last_all(self):
         if self.error:
-            return self.error
-        return float(self.ticker['data']['last_all']['value'])
+            return 0
+        try:
+            return float(self.ticker['data']['last_all']['value'])
+        except Exception:
+            return 0
 
     @property
     def high(self):
         if self.error:
-            return self.error
-        return float(self.ticker['data']['high']['value'])
+            return 0
+        try:
+            return float(self.ticker['data']['high']['value'])
+        except Exception:
+            return 0
 
     @property
     def low(self):
         if self.error:
-            return self.error
-        return float(self.ticker['data']['low']['value'])
+            return 0
+        try:
+            return float(self.ticker['data']['low']['value'])
+        except Exception:
+            return 0
 
     @property
     def volume(self):
         """the volume traded today"""
         if self.error:
-            return self.error
-        return self.ticker['data']['vol']['display_short']
+            return 0
+        try:
+            return self.ticker['data']['vol']['display_short']
+        except Exception:
+            return 0
 
     @property
     def vwap(self):
         """the volume-weighted average price"""
         if self.error:
-            return self.error
-        return float(self.ticker['data']['vwap']['value'])
+            return 0
+        try:
+            return float(self.ticker['data']['vwap']['value'])
+        except Exception:
+            return 0
 
     @property
     def last_buy(self):
         if self.error:
-            return self.error
-        return float(self.ticker['data']['buy']['value'])
+            return 0
+        try:
+            return float(self.ticker['data']['buy']['value'])
+        except Exception:
+            return 0
 
     @property
     def last_sell(self):
         if self.error:
-            return self.error
-        return float(self.ticker['data']['sell']['value'])
+            return 0
+        try:
+            return float(self.ticker['data']['sell']['value'])
+        except Exception:
+            return 0
 
 
 class BTCE(Fetcher):
@@ -190,47 +209,63 @@ class BTCE(Fetcher):
 
         if self.ticker is None:
             self.error = u'访问%s时发生网络故障' % self.name
-            # raise a web or website error exception
         elif 'ticker' not in self.ticker:
-            self.error = u'%s已返回，但内容错误' % self.name
-            # raise a wrong response content exception
+            self.error = u'%s已返回数据，但内容错误' % self.name
 
     @property
     def last_all(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['last'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['last'])
+        except Exception:
+            return 0
 
     @property
     def high(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['high'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['high'])
+        except Exception:
+            return 0
 
     @property
     def low(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['low'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['low'])
+        except Exception:
+            return 0
 
     @property
     def volume(self):
         """the volume traded today"""
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['vol_cur'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['vol_cur'])
+        except Exception:
+            return 0
 
     @property
     def last_buy(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['buy'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['buy'])
+        except Exception:
+            return 0
 
     @property
     def last_sell(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['sell'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['sell'])
+        except Exception:
+            return 0
 
 
 class BTCChina(Fetcher):
@@ -246,47 +281,63 @@ class BTCChina(Fetcher):
 
         if self.ticker is None:
             self.error = u'访问%s时发生网络故障' % self.name
-            # raise a web or website error exception
         elif 'ticker' not in self.ticker:
-            self.error = u'%s已返回，但内容错误' % self.name
-            # raise a wrong response content exception
+            self.error = u'%s已返回数据，但内容错误' % self.name
 
     @property
     def last_all(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['last'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['last'])
+        except Exception:
+            return 0
 
     @property
     def high(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['high'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['high'])
+        except Exception:
+            return 0
 
     @property
     def low(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['low'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['low'])
+        except Exception:
+            return 0
 
     @property
     def volume(self):
         """the volume traded today"""
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['vol'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['vol'])
+        except Exception:
+            return 0
 
     @property
     def last_buy(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['buy'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['buy'])
+        except Exception:
+            return 0
 
     @property
     def last_sell(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['sell'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['sell'])
+        except Exception:
+            return 0
 
 
 class Fxbtc(Fetcher):
@@ -303,44 +354,141 @@ class Fxbtc(Fetcher):
 
         if self.ticker is None:
             self.error = u'访问%s时发生网络故障' % self.name
-            # raise a web or website error exception
         elif 'ticker' not in self.ticker:
-            self.error = u'%s已返回，但内容错误' % self.name
-            # raise a wrong response content exception
+            self.error = u'%s已返回数据，但内容错误' % self.name
 
     @property
     def last_all(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['last_rate'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['last_rate'])
+        except Exception:
+            return 0
 
     @property
     def high(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['high'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['high'])
+        except Exception:
+            return 0
 
     @property
     def low(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['low'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['low'])
+        except Exception:
+            return 0
 
     @property
     def volume(self):
         """the volume traded today"""
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['vol'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['vol'])
+        except Exception:
+            return 0
 
     @property
     def last_buy(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['bid'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['bid'])
+        except Exception:
+            return 0
 
     @property
     def last_sell(self):
         if self.error:
-            return self.error
-        return float(self.ticker['ticker']['ask'])
+            return 0
+        try:
+            return float(self.ticker['ticker']['ask'])
+        except Exception:
+            return 0
+
+
+class CN42BTC(Fetcher):
+    TICKER_URL = 'http://42btc.sinaapp.com/api/trend/ticker/0/1'
+
+    def __init__(self, name='42btc'):
+        self.error = None
+        self.ticker = None
+        super(CN42BTC, self).__init__(name)
+
+    def get_ticker(self):
+        self.ticker = super(CN42BTC, self).get_ticker(self.TICKER_URL)
+
+        if self.ticker is None:
+            self.error = u'访问%s时发生网络故障' % self.name
+        elif not isinstance(self.ticker, list):
+            self.error = u'%s已返回数据，但内容错误' % self.name
+
+    @property
+    def last_all(self):
+        if self.error:
+            return 0
+        try:
+            return float(self.ticker[0])
+        except Exception:
+            return 0
+
+    @property
+    def high(self):
+        if self.error:
+            return 0
+        try:
+            return float(self.ticker[1])
+        except Exception:
+            return 0
+
+    @property
+    def low(self):
+        if self.error:
+            return 0
+        try:
+            return float(self.ticker[2])
+        except Exception:
+            return 0
+
+    @property
+    def average(self):
+        if self.error:
+            return 0
+        try:
+            return float(self.ticker[3])
+        except Exception:
+            return 0
+
+    @property
+    def volume(self):
+        """the volume traded today"""
+        if self.error:
+            return 0
+        try:
+            return float(self.ticker[4])
+        except Exception:
+            return 0
+
+    @property
+    def last_buy(self):
+        if self.error:
+            return 0
+        try:
+            return float(self.ticker[5])
+        except Exception:
+            return 0
+
+    @property
+    def last_sell(self):
+        if self.error:
+            return 0
+        try:
+            return float(self.ticker[6])
+        except Exception:
+            return 0
