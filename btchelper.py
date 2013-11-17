@@ -1,5 +1,5 @@
 #encoding=utf-8
-from bottle import request, get, post, debug, run, default_app
+from bottle import request, get, post
 import hashlib
 import time
 import xml.etree.ElementTree as ET
@@ -334,16 +334,3 @@ def check_signature():
 def response_post():
     msg_dic = recvmsg2dic()
     return handle_post(msg_dic)
-
-
-if __name__ == "__main__":
-    # bottle run mode
-    debug(True)
-    run(host='0.0.0.0', port=5050, reloader=True)
-else:
-    import os
-    # Change working directory so relative paths (and template lookup) work again
-    os.chdir(os.path.dirname(__file__))
-
-    # Do NOT use bottle.run() with mod_wsgi
-    application = default_app()
