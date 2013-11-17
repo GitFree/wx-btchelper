@@ -339,7 +339,7 @@ def response_post():
 if __name__ == "__main__":
     # bottle run mode
     debug(True)
-    run(host='0.0.0.0', port=8002, reloader=True)
+    run(host='0.0.0.0', port=5050, reloader=True)
 else:
     import os
     # Change working directory so relative paths (and template lookup) work again
