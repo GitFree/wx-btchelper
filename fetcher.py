@@ -80,9 +80,10 @@ class Fetcher(object):
         return [fh, sh]
 
     def get_request_result(self, url):
+        # weixin waits 5s for each request
+        TIMEOUT = 4
         try:
-            # weixin waits 5s for each request, so here set timeout=4
-            result = urllib2.urlopen(url, timeout=4)
+            result = urllib2.urlopen(url, timeout=TIMEOUT)
             if result.getcode() == 200:
                 return result.read()
             else:
@@ -92,6 +93,9 @@ class Fetcher(object):
             return None
         except urllib2.URLError, e:
             self.logger.error("URLError: %s" % e.reason)
+            return None
+        except Exception as e:
+            self.logger.error("Error: %s" % e)
             return None
 
     def get_ticker(self, ticker_url):
