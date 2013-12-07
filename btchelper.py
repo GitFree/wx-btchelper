@@ -90,8 +90,8 @@ FXBTC日交量：%.4f BTC
              0 if btcc is None else btcc.volume,
              0 if fxbtc is None else fxbtc.last_all,
              0 if fxbtc is None else fxbtc.volume,
-             0 if fxbtc is None else cn42btc.last_all,
-             0 if fxbtc is None else cn42btc.volume)
+             0 if cn42btc is None else cn42btc.last_all,
+             0 if cn42btc is None else cn42btc.volume)
 
         return self.response_txt(content)
 
